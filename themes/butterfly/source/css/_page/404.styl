@@ -1,0 +1,80 @@
+if hexo-config('error_404.enable')
+  .error404
+    #error-wrap
+      position: absolute
+      top: 50%
+      right: 0
+      left: 0
+      margin: 0 auto
+      padding: 0 20px
+      max-width: 1000px
+      transform: translate(0, -50%)
+
+      .error-content
+        @extend .cardHover
+        display: flex
+        flex-direction: row
+        justify-content: center
+        align-items: center
+        margin: 0 20px
+        height: 360px
+
+        +maxWidth768()
+          flex-direction: column
+          margin: 0
+          height: 500px
+
+        .error-img
+          flex: 1
+          height: 100%
+          border-top-left-radius: 8px
+          border-bottom-left-radius: 8px
+          background-color: $theme-color
+          background-position: center
+          background-size: cover
+
+          +maxWidth768()
+            flex: 1
+            width: 100%
+            border-top-right-radius: 8px
+            border-bottom-left-radius: 0
+
+        .error-info
+          flex: 1
+          padding: 10px
+          text-align: center
+          font-size: 14px
+
+          if $site-name-font
+            font-family: $site-name-font
+
+          +maxWidth768()
+            flex: 1.1
+            width: 100%
+
+          .error_title
+            margin-top: -80px
+            font-size: 9em
+
+            +maxWidth768()
+              margin-top: -60px
+
+          .error_subtitle
+            @extend .limit-more-line
+            margin-top: -70px
+            word-break: break-word
+            font-size: 1.6em
+            -webkit-line-clamp: 2
+
+          a
+            display: inline-block
+            margin-top: 10px
+            padding: 6px 30px
+            background: var(--btn-bg)
+            color: var(--btn-color)
+
+            i
+              padding-right: 6px
+
+    & + #rightside
+      display: none
