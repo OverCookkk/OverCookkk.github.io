@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Sql语句优化的小技巧 | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="避免使用select*用union all代替union小表驱动达标小表驱动大表，也就是说用小表的数据集驱动大表的数据集。 假如有order和user两张表，其中order表有10000条数据，而user表有100条数据。 这时如果想查一下，所有有效的用户下过的订单列表。 可以使用in关键字实现： 12select * from orderwhere user_id in (select id f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sql语句优化的小技巧">
+<meta property="og:url" content="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/Sql%E8%AF%AD%E5%8F%A5%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="避免使用select*用union all代替union小表驱动达标小表驱动大表，也就是说用小表的数据集驱动大表的数据集。 假如有order和user两张表，其中order表有10000条数据，而user表有100条数据。 这时如果想查一下，所有有效的用户下过的订单列表。 可以使用in关键字实现： 12select * from orderwhere user_id in (select id f">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-02T15:04:31.404Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.404Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="MySql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-中间件/MySql/Sql语句优化的小技巧" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/Sql%E8%AF%AD%E5%8F%A5%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.404Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Sql语句优化的小技巧
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="避免使用select"><a href="#避免使用select" class="headerlink" title="避免使用select*"></a>避免使用select*</h2><h2 id="用union-all代替union"><a href="#用union-all代替union" class="headerlink" title="用union all代替union"></a>用union all代替union</h2><h2 id="小表驱动达标"><a href="#小表驱动达标" class="headerlink" title="小表驱动达标"></a>小表驱动达标</h2><p>小表驱动大表，也就是说用小表的数据集驱动大表的数据集。</p>
+<p>假如有order和user两张表，其中order表有10000条数据，而user表有100条数据。</p>
+<p>这时如果想查一下，所有有效的用户下过的订单列表。</p>
+<p>可以使用<code>in</code>关键字实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from order</span><br><span class="line">where user_id in (select id from user where status=1)</span><br></pre></td></tr></table></figure>
+
+<p>此业务需求用in关键字去实现更加合适，因为如果sql语句中包含了in关键字，则它会优先执行in里面的<code>子查询语句</code>，然后再执行in外面的语句。如果in里面的数据量很少，作为条件查询速度更快。</p>
+<h2 id="批量操作"><a href="#批量操作" class="headerlink" title="批量操作"></a>批量操作</h2><p>如果你有一批数据经过业务处理之后，需要插入数据，该怎么办？</p>
+<p>如果在循环中逐条插入数据，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Order order: list)</span><br><span class="line">&#123;</span><br><span class="line">   orderMapper.<span class="built_in">insert</span>(order):</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//insert into order(id,code,user_id) values(123,&#x27;001&#x27;,100);</span></span><br></pre></td></tr></table></figure>
+
+<p>该操作需要多次请求数据库，才能完成这批数据的插入。</p>
+<p>这时，提供一个批量插入数据的方法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">orderMapper.<span class="built_in">insertBatch</span>(list);</span><br><span class="line"><span class="comment">//insert into order(id,code,user_id) values(123,&#x27;001&#x27;,100),(124,&#x27;002&#x27;,100),(125,&#x27;003&#x27;,101);</span></span><br></pre></td></tr></table></figure>
+
+<p>这样只需要远程请求一次数据库，sql性能会得到提升，数据量越多，提升越大。</p>
+<p><strong>但需要注意的是，不建议一次批量操作太多的数据，如果数据太多数据库响应也会很慢。批量操作需要把握一个度，建议每批数据尽量控制在500以内。如果数据多于500，则分多批次处理。</strong></p>
+<h2 id="多用limit"><a href="#多用limit" class="headerlink" title="多用limit"></a>多用limit</h2><p>有时候，我们需要查询某些数据中的第一条，比如：查询某个用户下的第一个订单，想看看他第一次的首单时间。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select id, create_date </span><br><span class="line">from order </span><br><span class="line">where user_id=123 </span><br><span class="line">order by create_date asc </span><br><span class="line">limit 1;</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>limit 1</code>，只返回该用户下单时间最小的那一条数据即可。</p>
+<h2 id="in中值太多"><a href="#in中值太多" class="headerlink" title="in中值太多"></a>in中值太多</h2><p>对于批量查询接口，我们通常会使用<code>in</code>关键字过滤出数据。比如：想通过指定的一些id，批量查询出用户信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,name from category where id in (1,2,3...100000000);</span><br></pre></td></tr></table></figure>
+
+<p>如果我们不做任何限制，该查询语句一次性可能会查询出非常多的数据，很容易导致接口超时。</p>
+<p>所以建议使用limit限制次数，最多500条。</p>
+<h2 id="高效的分页"><a href="#高效的分页" class="headerlink" title="高效的分页"></a>高效的分页</h2><p>有时候，列表页在查询数据时，为了避免一次性返回过多的数据影响接口性能，我们一般会对查询接口做分页处理。</p>
+<p>在mysql中分页一般用的<code>limit</code>关键字：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age </span><br><span class="line">from user limit 10,20;</span><br></pre></td></tr></table></figure>
+
+<p>如果表中数据量少，用limit关键字做分页，没啥问题。但如果表中数据量很多，用它就会出现性能问题，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age </span><br><span class="line">from user limit 1000000,20;</span><br></pre></td></tr></table></figure>
+
+<p>mysql会查到1000020条数据，然后丢弃前面的1000000条，只查后面的20条数据，这个是非常浪费资源的。</p>
+<p>海量数据分页应该先找到上次分页最大的id，然后利用id上的索引查询。不过该方案，要求id是连续的，并且有序的，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age </span><br><span class="line">from user where id &gt; 1000000 limit 20;</span><br></pre></td></tr></table></figure>
+
+<p>还能使用<code>between</code>优化分页。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age </span><br><span class="line">from user where id between 1000000 and 1000020;</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是between要在唯一索引上分页，不然会出现每页大小不一致的问题。</p>
+<h2 id="用连接查询代替子查询"><a href="#用连接查询代替子查询" class="headerlink" title="用连接查询代替子查询"></a>用连接查询代替子查询</h2><p>mysql中如果需要从两张以上的表中查询出数据的话，一般有两种实现方式：<code>子查询</code> 和 <code>连接查询</code>。</p>
+<p>子查询的例子如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from order</span><br><span class="line">where user_id in (select id from user where status=1)</span><br></pre></td></tr></table></figure>
+
+<p>子查询语句可以通过<code>in</code>关键字实现，一个查询语句的条件落在另一个select语句的查询结果中。程序先运行在嵌套在最内层的语句，再运行外层的语句。</p>
+<p>子查询语句的优点是简单，结构化，如果涉及的表数量不多的话。</p>
+<p>但缺点是<strong>mysql执行子查询时，需要创建临时表，查询完毕后，需要再删除这些临时表，有一些额外的性能消耗</strong>。</p>
+<p>这时可以改成连接查询。具体例子如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select o.* from order o</span><br><span class="line">inner join user u on o.user_id = u.id</span><br><span class="line">where u.status=1</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="join的表不宜过多"><a href="#join的表不宜过多" class="headerlink" title="join的表不宜过多"></a>join的表不宜过多</h2><p>根据阿里巴巴开发者手册的规定，join表的数量不应该超过<code>3</code>个。</p>
+<p>如果join太多，mysql在选择索引的时候会非常复杂，很容易选错索引。</p>
+<h2 id="控制索引的数量"><a href="#控制索引的数量" class="headerlink" title="控制索引的数量"></a>控制索引的数量</h2><p>众所周知，索引能够显著的提升查询sql的性能，但索引数量并非越多越好。</p>
+<p>因为表中新增数据时，需要同时为它创建索引，而索引是需要额外的存储空间的，而且还会有一定的性能消耗。</p>
+<p>阿里巴巴的开发者手册中规定，单表的索引数量应该尽量控制在<code>5</code>个以内，并且单个索引中的字段数不超过<code>5</code>个。</p>
+<p>mysql使用的B+树的结构来保存索引的，在insert、update和delete操作时，需要更新B+树索引。如果索引过多，会消耗很多额外的性能。</p>
+<p>那么，问题来了，如果表中的索引太多，超过了5个该怎么办？</p>
+<p>这个问题要辩证的看，如果你的系统并发量不高，表中的数据量也不多，其实超过5个也可以，只要不要超过太多就行。</p>
+<p>但对于一些高并发的系统，请务必遵守单表索引数量不要超过5的限制。</p>
+<p>那么，高并发系统如何优化索引数量？</p>
+<p>能够建联合索引，就别建单个索引，可以删除无用的单个索引。</p>
+<p>将部分查询功能迁移到其他类型的数据库中，比如：Elastic Seach、HBase等，在业务表中只需要建几个关键索引即可。</p>
+<h2 id="选择合理的字段类型"><a href="#选择合理的字段类型" class="headerlink" title="选择合理的字段类型"></a>选择合理的字段类型</h2><p>我们在选择字段类型时，应该遵循这样的原则：</p>
+<ol>
+<li>能用数字类型，就不用字符串，因为字符的处理往往比数字要慢。</li>
+<li>尽可能使用小的类型，比如：用bit存布尔值，用tinyint存枚举值等。</li>
+<li>长度固定的字符串字段，用char类型。</li>
+<li>长度可变的字符串字段，用varchar类型。</li>
+<li>金额字段用decimal，避免精度丢失问题。</li>
+</ol>
+<h2 id="提升group-by的效率"><a href="#提升group-by的效率" class="headerlink" title="提升group by的效率"></a>提升group by的效率</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select user_id,user_name from order</span><br><span class="line">group by user_id</span><br><span class="line">having user_id &lt;= 200;</span><br></pre></td></tr></table></figure>
+
+<p>这种写法性能不好，它先把所有的订单根据用户id分组之后，再去过滤用户id大于等于200的用户。</p>
+<p>分组是一个相对耗时的操作，为什么我们不先缩小数据的范围之后，再分组呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select user_id,user_name from order</span><br><span class="line">where user_id &lt;= 200</span><br><span class="line">group by user_id</span><br></pre></td></tr></table></figure>
+
+<p>使用where条件在分组前，就把多余的数据过滤掉了，这样分组时效率就会更高一些。</p>
+<blockquote>
+<p>其实这是一种思路，不仅限于group by的优化。我们的sql语句在做一些耗时的操作之前，应尽可能缩小数据范围，这样能提升sql整体的性能。</p>
+</blockquote>
+<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/Sql%E8%AF%AD%E5%8F%A5%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" data-id="clktuzzgq0049cdooa4yb7ugv" data-title="Sql语句优化的小技巧" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/MySql%E7%B4%A2%E5%BC%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          MySql索引
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis/Redis%E5%94%AF%E5%BF%AB%E4%B8%8D%E7%A0%B4%E7%9A%84%E7%A7%98%E5%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Redis唯快不破的秘密</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

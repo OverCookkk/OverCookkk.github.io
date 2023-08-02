@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>智能指针 | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="前言C++ 中有四种智能指针：auto_pt、unique_ptr、shared_ptr、weak_ptr ，包含在头文件&lt;memory&gt;中，其中后三个是 C++11 支持，第一个已经被 C++11 弃用且被 unique_prt 代替，不推荐使用。下文将对其逐个说明。 auto_ptr构造方法： 12345&#x2F;&#x2F;初始化方式1std::auto_ptr&lt;int&gt; ap1(ne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能指针">
+<meta property="og:url" content="http://example.com/2023/08/02/C++/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="前言C++ 中有四种智能指针：auto_pt、unique_ptr、shared_ptr、weak_ptr ，包含在头文件&lt;memory&gt;中，其中后三个是 C++11 支持，第一个已经被 C++11 弃用且被 unique_prt 代替，不推荐使用。下文将对其逐个说明。 auto_ptr构造方法： 12345&#x2F;&#x2F;初始化方式1std::auto_ptr&lt;int&gt; ap1(ne">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-02T15:04:31.396Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.396Z">
+<meta property="article:author" content="pepper">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-C++/智能指针" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/C++/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.396Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/C/">C++</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      智能指针
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>C++ 中有四种智能指针：auto_pt、unique_ptr、shared_ptr、weak_ptr ，包含在头文件&lt;memory&gt;中，其中后三个是 C++11 支持，第一个已经被 C++11 弃用且被 unique_prt 代替，不推荐使用。下文将对其逐个说明。</p>
+<h2 id="auto-ptr"><a href="#auto-ptr" class="headerlink" title="auto_ptr"></a>auto_ptr</h2><p>构造方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化方式1</span></span><br><span class="line"><span class="function">std::auto_ptr&lt;<span class="type">int</span>&gt; <span class="title">ap1</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">8</span>))</span></span>;</span><br><span class="line"><span class="comment">//初始化方式2</span></span><br><span class="line">std::auto_ptr&lt;<span class="type">int</span>&gt; ap2;</span><br><span class="line">ap2.<span class="built_in">reset</span>(<span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">8</span>));</span><br></pre></td></tr></table></figure>
+
+<p>当复制一个 std::auto_ptr 对象时（拷贝复制或 operator&#x3D; 复制），原对象所持有的堆内存对象也会转移给复制出来的对象，原对象会变为空，如果继续对原对象操作会产生错误，所以auto_ptr被unique_ptr替代。</p>
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p>std::unique_ptr 对其持有的堆内存具有唯一拥有权，也就是 std::unique_ptr 不可以拷贝或赋值给其他对象，其拥有的堆内存仅自己独占，std::unique_ptr 对象销毁时会释放其持有的堆内存。</p>
+<p>构造方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化方式1</span></span><br><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">up1</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">123</span>))</span></span>;</span><br><span class="line"><span class="comment">//初始化方式2</span></span><br><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; up2;</span><br><span class="line">up2.<span class="built_in">reset</span>(<span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">123</span>));</span><br><span class="line"><span class="comment">//初始化方式3 (-std=c++14)</span></span><br><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; up3 = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+<p>应该尽量使用初始化方式 3 的方式去创建一个 std::unique_ptr 而不是方式 1 和 2，因为形式 3 更安全。</p>
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>std::shared_ptr 持有的资源可以在多个 std::shared_ptr 之间共享，每多一个std::shared_ptr 对资源的引用，资源引用计数将增加 1，每一个指向该资源的 std::shared_ptr 对象析构时，资源引用计数减 1，最后一个 std::shared_ptr 对象析构时，发现资源计数为 0，将释放其持有的资源。<br>构造方法与unique_ptr一致，另外，std::shared_ptr 有几个常用函数如下：</p>
+<ul>
+<li>void swap (unique_ptr&amp; x)：将 shared_ptr 对象的内容与对象 x 进行交换，在它们两者之间转移管理指针的所有权而不破坏或改变二者的引用计数。</li>
+<li>void reset()、void reset (ponit p)：没有参数时，先将管理的计数器引用计数减一并将管理的指针和计数器置清零。有参数 p 时，先做面前没有参数的操作，再管理 p 的所有权和设置计数器。</li>
+<li>element_type* get()：得到其管理的指针。</li>
+<li>long int use_count()：返回与当前智能指针对象在同一指针上共享所有权的 shared_ptr 对象的数量，如果这是一个空的 shared_ptr，则该函数返回 0。如果要用来检查 use_count 是否为 1，可以改用成员函数 unique 会更快。</li>
+<li>bool unique()：返回当前 shared_ptr 对象是否不和其他智能指针对象共享指针的所有权，如果这是一个空的 shared_ptr，则该函数返回 false。</li>
+<li>element_type&amp; operator*()：重载指针的 * 运算符，返回管理的指针指向的地址的引用。</li>
+<li>element_type* operator-&gt;()：重载指针的 -&gt; 运算符，返回管理的指针，可以访问其成员。</li>
+<li>explicit operator bool()：返回存储的指针是否已经是空指针，返回的结果与 get() !&#x3D; 0 相同。</li>
+</ul>
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p>std::weak_ptr 是一个不控制资源生命周期的智能指针，是对对象的一种弱引用，只是提供了对其管理的资源的一个访问手段，引入它的目的为协助 std::shared_ptr 工作。std::weak_ptr 可以从一个 std::shared_ptr 或另一个 std::weak_ptr 对象构造，它的构造和析构不会引起引用计数的增加或减少。</p>
+<p><strong>std::weak_ptr 的正确使用场景是那些资源如果可能就使用，如果不可使用则不用的场景，它不参与资源的生命周期管理</strong></p>
+<h2 id="make-shared存在的必要性"><a href="#make-shared存在的必要性" class="headerlink" title="make_shared存在的必要性"></a>make_shared存在的必要性</h2><h3 id="引用计数原理"><a href="#引用计数原理" class="headerlink" title="引用计数原理"></a>引用计数原理</h3><p>C++11中的shared_ptr的定义我们截取一部分大概是这样的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">shared_ptr</span>&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T *px;                  <span class="comment">// 指向所引用对象的指针</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span>* pn;      <span class="comment">// 指向引用计数的指针</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>用px来记录引用的对象的指针，使用pn来记录有多少个shared_ptr引用了相同对象（引用计数），当pn指向的引用计数为0时，<code>delete px</code>；</p>
+<h3 id="shared-ptr和make-shared"><a href="#shared-ptr和make-shared" class="headerlink" title="shared_ptr和make_shared"></a>shared_ptr和make_shared</h3><p>C++11直接使用 <code>shared_ptr&lt;T&gt;</code> 和 <code>make_shared&lt;T&gt;</code> 都可以创建智能指针。</p>
+<ol>
+<li>使用shared_ptr直接创建智能指针：<code>auto p = shared_ptr&lt;int&gt;(new int(100));</code></li>
+</ol>
+<p>会有下面的两个过程：<br>（1）<code>new int</code>申请内存，并把指针传给shared_ptr中的px<br>（2）在shared_ptr中，会另外申请一块内存，初始化引用计数为1，并把指针赋值给pn</p>
+<p>这样把创建一个智能指针需要分两步申请内存，会存在下面两个问题：<br>（1）当 <code>new int</code> 申请内存成功，但引用计数内存申请失败时，很可能造成内存泄漏。<br>（2）内存分配是一个消耗性能的过程，分两次分配内存，意味着性能会下降。</p>
+<ol start="2">
+<li>使用make_shared创建智能指针：<code>auto p = make_shared&lt;int&gt;(100);</code>，make_shared只会申请一次内存，这块内存会大于int所占用的内存，多出的部分被用于智能指针引用计数。这样就避免了直接使用shared_ptr带来的问题。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/C++/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" data-id="clktuzzeo000gcdoob2tm6byl" data-title="智能指针" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/C++/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          小知识笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/CICD/jenkins/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MySql索引 | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="什么是索引索引（在MySQL中也叫“键key”）是存储引擎快速找到记录的一种数据结构。在查询语句select前加上explain命令，可以获取索引执行情况列表。 索引类型使用show index from 表名;命令可以查看索引详情。  主键索引primary key：它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候使用语句PRIMARY KEY (id) 同时创建主键索引。注意：一个表只">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql索引">
+<meta property="og:url" content="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/MySql%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="什么是索引索引（在MySQL中也叫“键key”）是存储引擎快速找到记录的一种数据结构。在查询语句select前加上explain命令，可以获取索引执行情况列表。 索引类型使用show index from 表名;命令可以查看索引详情。  主键索引primary key：它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候使用语句PRIMARY KEY (id) 同时创建主键索引。注意：一个表只">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95.png">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95.png">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/%EF%BC%88name%EF%BC%8Cage%EF%BC%89%E7%B4%A2%E5%BC%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5.png">
+<meta property="article:published_time" content="2023-08-02T15:04:31.404Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.404Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="MySql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-中间件/MySql/MySql索引" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/MySql%E7%B4%A2%E5%BC%95/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.404Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySql/">MySql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MySql索引
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是索引"><a href="#什么是索引" class="headerlink" title="什么是索引"></a>什么是索引</h2><p>索引（在MySQL中也叫“键key”）是存储引擎快速找到记录的一种数据结构。在查询语句select前加上explain命令，可以获取索引执行情况列表。</p>
+<h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><p>使用<code>show index from 表名;</code>命令可以查看索引详情。</p>
+<ol>
+<li><p>主键索引primary key：它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候使用语句<code>PRIMARY KEY (id) </code>同时创建主键索引。注意：一个表只能有一个主键。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `phpcolor_ad` (  </span><br><span class="line">`id` mediumint(8) NOT NULL AUTO_INCREMENT,  </span><br><span class="line">`name` varchar(30) NOT NULL,</span><br><span class="line">PRIMARY KEY (`id`),  </span><br><span class="line">);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img src="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png" alt="MySql主键索引"></p>
+<ol start="2">
+<li><p>唯一索引 UNIQUE：唯一索引列的值必须唯一，但允许有空值。如果是组合索引，则列值的组合必须唯一（每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束）。可以通过<code>ALTER TABLE 表名 ADD UNIQUE (列名);</code>创建唯一索引；可以通过<code>ALTER TABLE 表名 ADD UNIQUE (列名1,列名2);</code>；也可以在创建表的时候使用语句<code>KEY type (type)</code>创建索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `phpcolor_ad` (  </span><br><span class="line">`id` mediumint(8) NOT NULL AUTO_INCREMENT,  </span><br><span class="line">`name` varchar(30) NOT NULL,  </span><br><span class="line">`type` mediumint(1) NOT NULL,  </span><br><span class="line">PRIMARY KEY (`id`),  </span><br><span class="line">KEY `type` (`type`)  </span><br><span class="line">);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>创建组合索引结果如下：</p>
+<p><img src="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95.png" alt="MySql唯一索引"></p>
+<ol start="3">
+<li>普通索引 INDEX：这是最基本的索引，它没有任何限制，它与唯一索引在查询能力上是没差别的，主要考虑的是对更新性能的影响。<strong>注意，如果索引是用B+树结构，则B+树的每个叶子节点都是主键值，因为这样可以节省存储空间以及保证一致性</strong>。可以通过<code>ALTER TABLE 表名 ADD INDEX index_name (列名);</code>创建普通索引：</li>
+</ol>
+<p><img src="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95.png" alt="MySql普通索引"></p>
+<ol start="4">
+<li><p>组合索引 INDEX：即一个索引包含多个列，多用于避免回表查询。可以通过<code>ALTER TABLE 表名 ADD INDEX index_name(column1,column2,column3);</code>创建组合索引，它可以支持最左前缀原则，所以联合索引需要合理安排字段的前后顺序。</p>
+<p><img src="https://gitee.com/hu-zhihong/picbed/raw/master/%EF%BC%88name%EF%BC%8Cage%EF%BC%89%E7%B4%A2%E5%BC%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="（name，age）索引示意图"></p>
+</li>
+<li><p>全文索引 FULLTEXT：也称全文检索，是目前搜索引擎使用的一种关键技术。可以通过<code>ALTER TABLE 表名 ADD FULLTEXT (列名);</code>创建全文索引。</p>
+</li>
+</ol>
+<p>索引一经创建不能修改，如果要修改索引，只能删除重建。可以使用<br>DROP INDEX index_name ON table_name;删除索引。</p>
+<h2 id="索引设计的原则"><a href="#索引设计的原则" class="headerlink" title="索引设计的原则"></a>索引设计的原则</h2><p>1）适合索引的列是出现在where子句中的列，或者连接子句中指定的列；<br>2）基数较小的类，索引效果较差，没有必要在此列建立索引；<br>3）使用短索引，如果对长字符串列进行索引，应该指定一个前缀长度，这样能够节省大量索引空间；<br>4）不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构，索引列越多，这个时间就会越长。所以只保持需要的索引有利于查询即可。</p>
+<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2><p>有些时候虽然数据库有索引，但是并不被优化器选择使用。我们可以通过SHOW STATUS LIKE ‘Handler_read%’;查看索引的使用情况：</p>
+<p><img src="https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5.png" alt="MySql索引使用情况"></p>
+<p><strong>Handler_read_key</strong>：如果索引正在工作，Handler_read_key的值将很高。<br><strong>Handler_read_rnd_next</strong>：数据文件中读取下一行的请求数，如果正在进行大量的表扫描，值将较高，则说明索引利用不理想。</p>
+<p>索引优化规则：<br>1）如果MySQL估计使用索引比全表扫描还慢，则不会使用索引。<br>返回数据的比例是重要的指标，比例越低越容易命中索引。记住这个范围值——30%，后面所讲的内容都是建立在返回数据的比例在30%以内的基础上。</p>
+<p>2）前导模糊查询不能命中索引。<br>假设name列创建了一个普通索引，前导模糊查询不能命中索引：<br><code>EXPLAIN SELECT * FROM user WHERE name LIKE &#39;%s%&#39;;</code></p>
+<p><strong>非前导模糊查询则可以使用索引</strong>，可优化为使用非前导模糊查询：<br><code>EXPLAIN SELECT * FROM user WHERE name LIKE &#39;s%&#39;;</code></p>
+<p>3）复合索引的情况下，查询条件不包含索引列最左边部分（不满足最左原则），不会命中符合索引。<br>假设name,age,status列创建了复合索引，根据最左原则，可以命中复合索引index_name：<br><code>SELECT * FROM user WHERE name=&#39;swj&#39; AND status=1;</code>。</p>
+<p><strong>注意，最左原则并不是说是查询条件的顺序，而是查询条件中是否包含索引最左列字段（如此例子中索引最左列字段是name）。</strong></p>
+<p>4）union、in、or都能够命中索引，建议使用in，查询的CPU消耗：or&gt;in&gt;union。</p>
+<p>5）用or分割开的条件，如果or前的条件中列有索引，而后面的列中没有索引，那么涉及到的索引都不会被用到。</p>
+<p>因为or后面的条件列中没有索引，那么后面的查询肯定要走全表扫描，在存在全表扫描的情况下，就没有必要多一次索引扫描增加IO访问。</p>
+<p>6）负向条件查询不能使用索引，可以优化为in查询。<br>负向条件有：!&#x3D;、&lt;&gt;、not in、not exists、not like等。</p>
+<p>7）范围条件查询可以命中索引。范围条件有：&lt;、&lt;&#x3D;、&gt;、&gt;&#x3D;、between等。</p>
+<p>9）建立索引的列，不允许为null。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/MySql%E7%B4%A2%E5%BC%95/" data-id="clktuzzgo0047cdooh5f68d19" data-title="MySql索引" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%BF%9E%E6%8E%A5%E4%B8%80%E4%B8%AA%20IP%20%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%BB%E6%9C%BA%E6%97%B6%EF%BC%8C%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          连接一个IP不存在的主机时，握手过程是怎样的？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySql/Sql%E8%AF%AD%E5%8F%A5%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Sql语句优化的小技巧</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>go设计模式的实现 | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="使用go语言实现单例、观察者等常用的设计模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go设计模式的实现">
+<meta property="og:url" content="http://example.com/2023/08/02/GO/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="使用go语言实现单例、观察者等常用的设计模式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E6%B7%98%E5%AE%9D%E4%B8%8B%E5%8D%95%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%9D%97UML%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8FUML%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E6%B7%98%E5%AE%9D%E4%B8%8B%E5%8D%95%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-GO/go设计模式的实现" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/GO/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.400Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/GO/">GO</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      go设计模式的实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>单例模式是用来控制类型实例的数量的，当需要确保一个类型只有一个实例时，就需要使用单例模式。</p>
+<h3 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h3><p>该模式适用于在程序早期初始化时创建已经确定需要加载的类型实例，比如项目的数据库实例。 Go 语言实现时，借助 Go 的<code>init</code>函数来实现特别方便，虽然 <code>init()</code> 函数在每个 package 中都被执行了多次，但是在同一个 package 中全局变量只会被初始化一次。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao</span><br><span class="line"><span class="comment">// 注意定义非导出类型</span></span><br><span class="line"><span class="keyword">type</span> databaseConn <span class="keyword">struct</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dbConn *databaseConn</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    dbConn = &amp;databaseConn&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> *databaseConn&#123;</span><br><span class="line">    <span class="keyword">return</span> dbConn</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>C++实现方式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 懒汉模式</span><br><span class="line"></span><br><span class="line">该模式就是延迟加载，要考虑并发环境下，你的判断实例是否已经创建时，是不是用的当前读。</span><br><span class="line"></span><br><span class="line">```<span class="function">go</span></span><br><span class="line"><span class="function">package singleton</span></span><br><span class="line"><span class="function"><span class="title">import</span> <span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="string">&quot;sync&quot;</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">type singleton <span class="keyword">struct</span></span>&#123;&#125;</span><br><span class="line">var instance *singleton</span><br><span class="line">var once sync.<span class="function">Once</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">func <span class="title">GetInstance</span><span class="params">()</span> *singleton </span>&#123;</span><br><span class="line">    once.<span class="built_in">Do</span>(<span class="built_in">func</span>() &#123;</span><br><span class="line">        instance = &amp;singleton&#123;&#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>​		定义一类算法族，将每个算法分别封装起来，让他们可以互相替换，此模式让算法的变化独立于使用算法的客户端。</p>
+<p>例子：用户支付，客户端使用微信支付、或者是其他三方在线支付。</p>
+<ul>
+<li>PayBehavior：抽象策略，对支付任务进行接口抽象</li>
+<li>WxPay 和 ThirdPay ：是具体的策略实现</li>
+<li>PaxCtx：上下文对象在这里有两个作用，第一是协调自己持有的 PayBehavior 具体实现，完成支付的任务，第二是维护发起支付需要的支付参数–即图中的私有属性<code>payParams</code>。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义PayBehavior 策略的接口</span></span><br><span class="line"><span class="keyword">type</span> PayBehavior <span class="keyword">interface</span> &#123;</span><br><span class="line">     OrderPay(px *PayCtx)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了接口后，我们来定义两个策略的实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具体支付策略实现</span></span><br><span class="line"><span class="comment">// 微信支付</span></span><br><span class="line"><span class="keyword">type</span> WxPay <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*WxPay)</span></span> OrderPay(px *PayCtx) &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Wx支付加工支付请求 %v\n&quot;</span>, px.payParams)</span><br><span class="line">	fmt.Println(<span class="string">&quot;正在使用Wx支付进行支付&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 三方支付</span></span><br><span class="line"><span class="keyword">type</span> ThirdPay <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*ThirdPay)</span></span> OrderPay(px *PayCtx) &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;三方支付加工支付请求 %v\n&quot;</span>, px.payParams)</span><br><span class="line">	fmt.Println(<span class="string">&quot;正在使用三方支付进行支付&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了策略的实现后，还得有个上下文来协调它们，以及持有完成这个任务所必需的那些入参<code>payParams</code>:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> PayCtx <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// 提供支付能力的接口实现</span></span><br><span class="line">	payBehavior PayBehavior</span><br><span class="line">	<span class="comment">// 支付参数</span></span><br><span class="line">	payParams <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(px *PayCtx)</span></span> setPayBehavior(p PayBehavior) &#123;</span><br><span class="line">	px.payBehavior = p</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(px *PayCtx)</span></span> Pay() &#123;</span><br><span class="line">	px.payBehavior.OrderPay(px)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewPayCtx</span><span class="params">(p PayBehavior)</span></span> *PayCtx &#123;</span><br><span class="line">	<span class="comment">// 支付参数，Mock数据</span></span><br><span class="line">	params := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">		<span class="string">&quot;appId&quot;</span>: <span class="string">&quot;234fdfdngj4&quot;</span>,</span><br><span class="line">		<span class="string">&quot;mchId&quot;</span>: <span class="number">123456</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> &amp;PayCtx&#123;</span><br><span class="line">		payBehavior: p,</span><br><span class="line">		payParams:   params,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用过程：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	wxPay := &amp;WxPay&#123;&#125;</span><br><span class="line">	px := NewPayCtx(wxPay)</span><br><span class="line">	px.Pay()</span><br><span class="line">	<span class="comment">// 假设现在发现微信支付没钱，改用三方支付进行支付</span></span><br><span class="line">	thPay := &amp;ThirdPay&#123;&#125;</span><br><span class="line">	px.setPayBehavior(thPay)</span><br><span class="line">	px.Pay()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><p>它是一种行为型设计模式。使用这个模式，我们能为请求创建一条由多个处理器组成的链路，每个处理器各自负责自己的职责，相互之间没有耦合，完成自己任务后请求对象即传递到链路的下一个处理器进行处理。</p>
+<p>责任链在很多流行框架里都有被用到，像中间件、拦截器等框架组件都是应用的这种设计模式。</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>上面我们说了职责链在项目公共组件中的一些应用，让我们能在核心逻辑的前置和后置流程中增加一些基础的通用功能。但其实在一些核心的业务中，<strong>应用职责链模式能够让我们无痛地扩展业务流程的步骤</strong>。</p>
+<p>比如淘宝在刚刚创立的时候购物生成订单处理流程起初可能是这样的。</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E6%B7%98%E5%AE%9D%E4%B8%8B%E5%8D%95%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="淘宝下单简单流程图"></p>
+<p>整个流程比较干净**”用户参数校验–购物车数据校验–商品库存校验–运费计算–扣库存—生成订单”**，我们姑且把它称为清纯版的购物下单流程，这通常都是在产品从0到1的时候，流程比较清纯，在线购物你能实现在线选品、下单、支付这些就行了。</p>
+<p>责任链模式抽象成 UML 类图如下：</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%9D%97UML%E5%9B%BE.png" alt="责任链模块UML图"></p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>下单接口结构如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> OrderHandler <span class="keyword">interface</span> &#123;</span><br><span class="line">	SetNext(OrderHandler) OrderHandler</span><br><span class="line">	Execute(*order) <span class="type">error</span></span><br><span class="line">	Do() <span class="type">error</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><p>成员方法</p>
+</li>
+<li><ul>
+<li><code>SetNext</code>: 把下一个对象的实例绑定到当前对象的<code>nextHandler</code>属性上；</li>
+<li><code>Do</code>: 当前对象业务逻辑入口，他是每个处理对象实现自己逻辑的地方；</li>
+<li><code>Execute</code>: 负责职责链上请求的处理和传递；它会调用当前对象的<code>Do</code>，<code>nextHandler</code>不为空则调用<code>nextHandler.Do</code>；</li>
+</ul>
+</li>
+</ul>
+<p>Next类充当抽象类型，实现公共方法（SetNext和Execute），抽象方法（Do）不实现留给实现类自己实现</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Next <span class="keyword">struct</span> &#123;</span><br><span class="line">	nextHandler OrderHandler	<span class="comment">// 下一个等待被调用的对象实例</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SetNext 把下一个对象的实例绑定到当前对象的nextHandler属性上，并返回下一个对象的实例</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Next)</span></span> SetNext(handler OrderHandler) OrderHandler &#123;</span><br><span class="line">	n.nextHandler = handler</span><br><span class="line">	<span class="keyword">return</span> handler</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Next)</span></span> Execute(o *order) (err <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> n.nextHandler != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> err = n.nextHandler.Do(); err != <span class="literal">nil</span> &#123; <span class="comment">// 执行流程里的内容</span></span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> n.nextHandler.Execute(o) <span class="comment">// 调用下一个流程</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>成员属性</p>
+<ul>
+<li><code>nextHandler</code>: 下一个等待被调用的对象实例</li>
+</ul>
+</li>
+</ul>
+<p>具体流程实现结构体如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DataCheck 数据校验管理器；该结构体实现了OrderHandler接口</span></span><br><span class="line"><span class="keyword">type</span> DataCheck <span class="keyword">struct</span> &#123;</span><br><span class="line">	Next</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *DataCheck)</span></span> Do() (err <span class="type">error</span>) &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;doing UserDataCheck&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// FreightCalc 运费计算；该结构体实现了OrderHandler接口</span></span><br><span class="line"><span class="keyword">type</span> FreightCalc <span class="keyword">struct</span> &#123;</span><br><span class="line">	Next</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *FreightCalc)</span></span> Do() (err <span class="type">error</span>) &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;doing FreightCalc&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// DecreaseRepe 扣库存；该结构体实现了OrderHandler接口</span></span><br><span class="line"><span class="keyword">type</span> DecreaseRepe <span class="keyword">struct</span> &#123;</span><br><span class="line">	Next</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *DecreaseRepe)</span></span> Do() (err <span class="type">error</span>) &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;doing DecreaseRepe&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// StartHandler 不做操作，作为第一个Handler向下转发请求</span></span><br><span class="line"><span class="comment">// Go 语法限制，抽象公共逻辑到通用Handler后，并不能跟继承一样让公共方法调用不通子类的实现</span></span><br><span class="line"><span class="keyword">type</span> StartHandler <span class="keyword">struct</span> &#123;</span><br><span class="line">	Next</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Do 空Handler的Do</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *StartHandler)</span></span> Do(c *order) (err <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="comment">// 空Handler 这里什么也不做 只是载体 do nothing...</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	startHandler := &amp;StartHandler&#123;&#125;</span><br><span class="line">	<span class="comment">// 把下单流程链路串起来</span></span><br><span class="line">    startHandler.SetNext(&amp;DataCheck&#123;&#125;).	<span class="comment">// DataCheck&#123;&#125;对象隐式转换成了OrderHandler接口</span></span><br><span class="line">		SetNext(&amp;FreightCalc&#123;&#125;).</span><br><span class="line">		SetNext(&amp;DecreaseRepe&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	o := &amp;order&#123;name: <span class="string">&quot;abc&quot;</span>&#125;</span><br><span class="line">	startHandler.Execute(o)</span><br><span class="line">	fmt.Println(<span class="string">&quot;end&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> order <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p><strong>代理模式</strong>是一种结构型设计模式。 其中代理控制着对于原对象的访问， 并允许在将请求提交给原对象的前后进行一些处理，从而增强原对象的逻辑处理。</p>
+<p>进行逻辑处理的原对象通常被称作服务对象，<strong>代理要跟服务对象实现相同的接口</strong>，才能让客户端傻傻分不清自己使用的到底是代理还是真正的服务对象，这样一来代理就能在客户端察觉不到的情况下对服务对象的处理逻辑进行增强。</p>
+<p>UML图如下：</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8FUML%E5%9B%BE.png" alt="代理模式UML图"></p>
+<h3 id="具体实现-1"><a href="#具体实现-1" class="headerlink" title="具体实现"></a>具体实现</h3><p>假设有一个代表小汽车的 Car 类型，小汽车要的主要行为就是可以让人驾驶，所以 Car 需要实现一个代表驾驶行为的接口（interface）Vehicle，该接口只有一个方法<code>Drive()</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接口</span></span><br><span class="line"><span class="keyword">type</span> Vehicle <span class="keyword">interface</span> &#123;</span><br><span class="line">	Drive()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Car结构体实现了Vehicle接口</span></span><br><span class="line"><span class="keyword">type</span> Car <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Car)</span></span> Drive() &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Car is being driven&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>果在开车时要加一个驾驶员的年龄限制，我们该怎么办呢？ 通常的做法是，加一个表示驾驶员的类型 <code>Driver</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Driver <span class="keyword">struct</span> &#123;</span><br><span class="line">	Age <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后再来一个包装 Driver 和 Vehicle 类型的包装类型，也就是所谓的代理类。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CarProxy结构体实现了Vehicle接口</span></span><br><span class="line"><span class="keyword">type</span> CarProxy <span class="keyword">struct</span> &#123;</span><br><span class="line">	vehicle    Vehicle	<span class="comment">// 接口对象</span></span><br><span class="line">	driver *Driver</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造带有Car的CarProxy对象</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCarProxy</span><span class="params">(driver *Driver)</span></span> *CarProxy &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;CarProxy&#123;&amp;Car&#123;&#125;, driver&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *CarProxy)</span></span> Drive() &#123;</span><br><span class="line">	<span class="keyword">if</span> c.driver.Age &gt;= <span class="number">16</span> &#123;</span><br><span class="line">		c.vehicle.Drive()</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Driver too young!&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> car := NewCarProxy(&amp;Driver&#123;<span class="number">12</span>&#125;)</span><br><span class="line"> car.Drive() <span class="comment">// 输出 Driver too young!</span></span><br><span class="line"> car2 := NewCarProxy(&amp;Driver&#123;<span class="number">22</span>&#125;)</span><br><span class="line"> car2.Drive() <span class="comment">// 输出 Car is being driven</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/GO/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-id="clktuzzf8001ccdooaqu67rwe" data-title="go设计模式的实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/go/" rel="tag">go</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/GO/go%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          go环境搭建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/GO/map/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">go-map</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

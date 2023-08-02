@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Elasticsearch | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="什么是全文搜索引擎？  百度百科中的定义： 全文搜索引擎是目前广泛应用的主流搜索引擎。它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这个过程类似于通过字典中的检索字表查字的过程。  数据类型从定义中我们已经可以大致了解全文检索的思路了，为了更详细">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch">
+<meta property="og:url" content="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/ElasticSearch/Elasticsearch/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="什么是全文搜索引擎？  百度百科中的定义： 全文搜索引擎是目前广泛应用的主流搜索引擎。它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这个过程类似于通过字典中的检索字表查字的过程。  数据类型从定义中我们已经可以大致了解全文检索的思路了，为了更详细">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/ElasticSearch%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%90%9C%E7%B4%A2%E5%8E%9F%E7%90%86.png">
+<meta property="article:published_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:author" content="pepper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/ElasticSearch%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%90%9C%E7%B4%A2%E5%8E%9F%E7%90%86.png">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-中间件/ElasticSearch/Elasticsearch" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/ElasticSearch/Elasticsearch/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.400Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Elasticsearch
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>什么是全文搜索引擎？</p>
+<blockquote>
+<p><strong>百度百科中的定义</strong>： 全文搜索引擎是目前广泛应用的主流搜索引擎。它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这个过程类似于通过字典中的检索字表查字的过程。</p>
+</blockquote>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>从定义中我们已经可以大致了解全文检索的思路了，为了更详细的说明，我们先从生活中的数据说起。</p>
+<p>我们生活中的数据总体分为两种：<strong>结构化数据</strong> 和 <strong>非结构化数据</strong>。</p>
+<ul>
+<li><strong>结构化数据</strong>： 指具有固定格式或有限长度的数据，如数据库，元数据等。</li>
+<li><strong>非结构化数据</strong>： 非结构化数据又可称为全文数据，指不定长或无固定格式的数据，如邮件，word文档等。</li>
+</ul>
+<h2 id="使用ES而不是数据库的原因"><a href="#使用ES而不是数据库的原因" class="headerlink" title="使用ES而不是数据库的原因"></a>使用ES而不是数据库的原因</h2><ol>
+<li>数据模型：数据库通常采用<strong>结构化数据模型</strong>，使用表格和列来组织和存储数据。ES则采用<strong>面向文档的数据模型</strong>，将数据存储为自包含的JSON文档。这使得ES更适合存储和搜索非结构化或半结构化的数据，如日志、文本文档、地理位置数据等。</li>
+<li>搜索和分析能力：ES专注于全文搜索和实时分析，提供强大的搜索、聚合和分析功能。它使用<strong>倒排索引</strong>和<strong>分布式架构</strong>来支持高性能的搜索和复杂的查询操作。相比之下，传统数据库的搜索功能较为有限，对于大规模文本搜索和复杂的聚合查询可能效率较低。</li>
+<li>弹性和扩展性：ES具有良好的水平扩展能力，可以轻松地通过添加节点来增加容量和吞吐量。它的分布式架构和自动分片机制使得数据可以并行处理和存储在多个节点上，从而实现高可用性和容错性。传统数据库在处理大规模数据和高并发负载时可能面临性能瓶颈和扩展困难。</li>
+<li>实时性：ES提供近实时搜索能力，即文档索引后几乎立即可进行搜索。这使得ES适用于需要快速响应和实时更新的应用场景，如实时日志分析、监控和仪表盘。传统数据库通常具有更高的一致性和事务支持，但在实时性方面可能不如ES。</li>
+<li>多种用例支持：ES广泛应用于全文搜索、日志分析、电子商务搜索、内容推荐、地理空间分析等多个领域。它提供了丰富的搜索、聚合和分析功能，以及与Kibana等工具的集成，使得数据探索和可视化更加便捷。传统数据库则更适用于事务处理、关系型数据管理和复杂的数据操作。</li>
+</ol>
+<p>综上所述，选择使用ES而不是传统数据库的原因在于其强大的搜索和分析能力、良好的扩展性和实时性，以及适用于非结构化或半结构化数据的存储和检索需求。然而，具体选择何种技术取决于应用的特定需求和数据模型。在某些情况下，数据库和ES可以结合使用，以满足不同层次的数据管理和查询需求。</p>
+<h2 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h2><p>生成的倒排索引中，词条会排序，形成一颗树形结构，提升词条的查询速度。</p>
+<p>如下图所示，查询”华为”会得到对应的value&#x3D;1和3，再通过1和3找到id&#x3D;1和3的文档。</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/ElasticSearch%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%90%9C%E7%B4%A2%E5%8E%9F%E7%90%86.png" alt="ElasticSearch数据的存储和搜索原理"></p>
+<h2 id="ES基本概念与关系型数据库的比较"><a href="#ES基本概念与关系型数据库的比较" class="headerlink" title="ES基本概念与关系型数据库的比较"></a>ES基本概念与关系型数据库的比较</h2><table>
+<thead>
+<tr>
+<th align="left">ES概念</th>
+<th align="left">关系型数据库</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Index（索引）支持全文检索</td>
+<td align="left">Database（数据库）</td>
+</tr>
+<tr>
+<td align="left">Type（类型）</td>
+<td align="left">Table（表）</td>
+</tr>
+<tr>
+<td align="left">Document（文档），不同文档可以有不同的字段集合</td>
+<td align="left">Row（数据行）</td>
+</tr>
+<tr>
+<td align="left">Field（字段）</td>
+<td align="left">Column（数据列）</td>
+</tr>
+<tr>
+<td align="left">Mapping（映射）</td>
+<td align="left">Schema（模式）</td>
+</tr>
+</tbody></table>
+<h2 id="Elasticsearch-vs-Solr的选择"><a href="#Elasticsearch-vs-Solr的选择" class="headerlink" title="Elasticsearch vs Solr的选择"></a>Elasticsearch vs Solr的选择</h2><p>由于Lucene的复杂性，一般很少会考虑它作为搜索的第一选择，排除一些公司需要自研搜索框架，底层需要依赖Lucene。所以这里我们重点分析 Elasticsearch 和 Solr。</p>
+<p>这两个搜索引擎都是流行的，先进的的开源搜索引擎。它们都是围绕核心底层搜索库 - Lucene构建的 - 但它们又是不同的。像所有东西一样，每个都有其优点和缺点，根据您的需求和期望，每个都可能更好或更差。Solr和Elasticsearch都在快速发展，所以，话不多说，先来看下它们的差异清单：</p>
+<table>
+<thead>
+<tr>
+<th align="center">特征</th>
+<th align="center">Solr&#x2F;SolrCloud</th>
+<th align="center">Elasticsearch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">社区和开发者</td>
+<td align="center">Apache 软件基金和社区支持</td>
+<td align="center">单一商业实体及其员工</td>
+</tr>
+<tr>
+<td align="center">节点发现</td>
+<td align="center">Apache Zookeeper，在大量项目中成熟且经过实战测试</td>
+<td align="center">Zen内置于Elasticsearch本身，需要专用的主节点才能进行分裂脑保护</td>
+</tr>
+<tr>
+<td align="center">碎片放置</td>
+<td align="center">本质上是静态，需要手动工作来迁移分片，从Solr 7开始 - Autoscaling API允许一些动态操作</td>
+<td align="center">动态，可以根据群集状态按需移动分片</td>
+</tr>
+<tr>
+<td align="center">高速缓存</td>
+<td align="center">全局，每个段更改无效</td>
+<td align="center">每段，更适合动态更改数据</td>
+</tr>
+<tr>
+<td align="center">分析引擎性能</td>
+<td align="center">非常适合精确计算的静态数据</td>
+<td align="center">结果的准确性取决于数据放置</td>
+</tr>
+<tr>
+<td align="center">全文搜索功能</td>
+<td align="center">基于Lucene的语言分析，多建议，拼写检查，丰富的高亮显示支持</td>
+<td align="center">基于Lucene的语言分析，单一建议API实现，高亮显示重新计算</td>
+</tr>
+<tr>
+<td align="center">DevOps支持</td>
+<td align="center">尚未完全，但即将到来</td>
+<td align="center">非常好的API</td>
+</tr>
+<tr>
+<td align="center">非平面数据处理</td>
+<td align="center">嵌套文档和父-子支持</td>
+<td align="center">嵌套和对象类型的自然支持允许几乎无限的嵌套和父-子支持</td>
+</tr>
+<tr>
+<td align="center">查询DSL</td>
+<td align="center">JSON（有限），XML（有限）或URL参数</td>
+<td align="center">JSON</td>
+</tr>
+<tr>
+<td align="center">索引&#x2F;收集领导控制</td>
+<td align="center">领导者安置控制和领导者重新平衡甚至可以节点上的负载</td>
+<td align="center">不可能</td>
+</tr>
+<tr>
+<td align="center">机器学习</td>
+<td align="center">内置 - 在流聚合之上，专注于逻辑回归和学习排名贡献模块</td>
+<td align="center">商业功能，专注于异常和异常值以及时间序列数据</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/ElasticSearch/Elasticsearch/" data-id="clktuzzgn0043cdoodvgadr56" data-title="Elasticsearch" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/k8s/informer/informer%E7%AE%80%E4%BB%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/DDD/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

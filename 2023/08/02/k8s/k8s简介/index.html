@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>k8s简介 | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="容器编排容器化部署方式给带来很多的便利，但是也会出现一些问题，比如说：  一个容器故障停机了，怎么样让另外一个容器立刻启动去替补停机的容器。  当并发访问量变大的时候，怎么样做到横向扩展容器数量。   这些容器管理的问题统称为容器编排问题。 编排系统的需求催生 Kubernetes尽管Docker为容器化的应用程序提供了开放标准，但随着容器越来越多出现了一系列新问题：  如何协调和调度这些容器？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s简介">
+<meta property="og:url" content="http://example.com/2023/08/02/k8s/k8s%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="容器编排容器化部署方式给带来很多的便利，但是也会出现一些问题，比如说：  一个容器故障停机了，怎么样让另外一个容器立刻启动去替补停机的容器。  当并发访问量变大的时候，怎么样做到横向扩展容器数量。   这些容器管理的问题统称为容器编排问题。 编排系统的需求催生 Kubernetes尽管Docker为容器化的应用程序提供了开放标准，但随着容器越来越多出现了一系列新问题：  如何协调和调度这些容器？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/k8s%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Pod%E3%80%81RC%E4%B8%8EService%E7%9A%84%E5%85%B3%E7%B3%BB.png">
+<meta property="article:published_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="k8s">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/k8s%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-k8s/k8s简介" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/k8s/k8s%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.400Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/k8s/">k8s</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      k8s简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="容器编排"><a href="#容器编排" class="headerlink" title="容器编排"></a>容器编排</h2><p>容器化部署方式给带来很多的便利，但是也会出现一些问题，比如说：</p>
+<ul>
+<li><p>一个容器故障停机了，怎么样让另外一个容器立刻启动去替补停机的容器。</p>
+</li>
+<li><p>当并发访问量变大的时候，怎么样做到横向扩展容器数量。</p>
+</li>
+</ul>
+<p>这些容器管理的问题统称为容器编排问题。</p>
+<h2 id="编排系统的需求催生-Kubernetes"><a href="#编排系统的需求催生-Kubernetes" class="headerlink" title="编排系统的需求催生 Kubernetes"></a>编排系统的需求催生 Kubernetes</h2><p>尽管Docker为容器化的应用程序提供了开放标准，但随着容器越来越多出现了一系列新问题：</p>
+<ul>
+<li>如何协调和调度这些容器？</li>
+<li>如何在升级应用程序时不会中断服务？</li>
+<li>如何监视应用程序的运行状况？</li>
+<li>如何批量重新启动容器里的程序？</li>
+</ul>
+<p>解决这些问题需要容器编排技术，可以将众多机器抽象，对外呈现出一台超大机器。现在业界比较流行的有：Kubernetes 、Mesos、Docker Swarm。</p>
+<p>在业务发展初期只有几个微服务，这时用 Docker 就足够了，但随着业务规模逐渐扩大，容器越来越多，运维人员的工作越来越复杂，这个时候就需要编排系统解救。</p>
+<h2 id="Kubernetes-解决的核心问题"><a href="#Kubernetes-解决的核心问题" class="headerlink" title="Kubernetes 解决的核心问题"></a>Kubernetes 解决的核心问题</h2><ul>
+<li><p>自我修复：一旦某一个容器崩溃，能够在1秒中左右迅速启动新的容器。</p>
+</li>
+<li><p>弹性伸缩：可以根据需要，自动对集群中正在运行的容器数量进行调整。</p>
+</li>
+<li><p>服务发现：服务可以通过自动发现的形式找到它所依赖的服务。</p>
+</li>
+<li><p>负载均衡：如果一个服务起动了多个容器，能够自动实现请求的负载均衡。</p>
+</li>
+<li><p>版本回退：如果发现新发布的程序版本有问题，可以立即回退到原来的版本。</p>
+</li>
+<li><p>存储编排：可以根据容器自身的需求自动创建存储卷。</p>
+</li>
+</ul>
+<p>Kubernetes 的出现不仅主宰了容器编排的市场，更改变了过去的运维方式，不仅将开发与运维之间边界变得更加模糊，而且让 DevOps 这一角色变得更加清晰，每一个软件工程师都可以通过 <a href="https://link.juejin.cn/?target=http://mp.weixin.qq.com/s?__biz=MzI0MDQ4MTM5NQ==&mid=2247510899&idx=1&sn=6c136480f2812261681309aeac17d73e&chksm=e918ce6fde6f4779a86d1f78fd123310614a1ae895e8a3bece27c68f7f434e86a4a65746637e&scene=21%23wechat_redirect">Kubernetes</a> 来定义服务之间的拓扑关系、线上的节点个数、资源使用量并且能够快速实现水平扩容、蓝绿部署等在过去复杂的运维操作。</p>
+<h2 id="Kubernetes-架构和组件"><a href="#Kubernetes-架构和组件" class="headerlink" title="Kubernetes  架构和组件"></a>Kubernetes  架构和组件</h2><p>Kubernetes 由众多组件组成，组件间通过 API 互相通信，归纳起来主要分为三个部分：</p>
+<ul>
+<li>controller manager</li>
+<li>nodes</li>
+<li>pods</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/k8s%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="k8s集群架构图"></p>
+<ul>
+<li><p><strong>ApiServer</strong> : 资源操作的唯一入口，接收用户输入的命令，提供认证、授权、API注册和发现等机制。</p>
+</li>
+<li><p><strong>Scheduler</strong> : 负责集群资源调度，按照预定的调度策略将Pod调度到相应的node节点上。</p>
+</li>
+<li><p><strong>Controller Manager</strong>：即控制管理器集合，这些控制器都具有一种名为控制循环（control loop）的机制，这个机制的功能简单来讲就是负责保持集群中对象的实际状态与期望状态保持一致（用于调度程序以及节点状态检测）。</p>
+</li>
+<li><p><strong>Etcd</strong> ：负责存储集群中各种资源对象的信息。</p>
+</li>
+<li><p><strong>Nodes</strong>：构成了Kubernetes集群的集体计算能力，实际部署容器运行的地方。</p>
+</li>
+<li><p><strong>Pods</strong>：Kubernetes集群中资源的最小单位，可以包含一个或多个容器。</p>
+</li>
+<li><p><strong>Kubelet</strong> : 负责维护容器的生命周期，即通过控制docker，来创建、更新、销毁容器。</p>
+</li>
+<li><p><strong>kube-proxy</strong>：每个node节点都有一个组件kube-proxy，实际上是为service服务的，通过kube-proxy，实现流量从service到pod的转发，kube-proxy也可以实现简单的<strong>负载均衡</strong>功能。</p>
+</li>
+</ul>
+<p>Kubernetes 遵循非常传统的客户端&#x2F;服务端的架构模式，客户端可以通过 RESTful 接口或者直接使用 kubectl 与 <a href="https://link.juejin.cn/?target=http://mp.weixin.qq.com/s?__biz=MzI0MDQ4MTM5NQ==&mid=2247499493&idx=3&sn=4453fb452640045f0b7a2b020a4de61a&chksm=e9189bf9de6f12ef78a70fd575f1e76b377fd454539e94b9e869270a99fb08f48278154be2fa&scene=21%23wechat_redirect">Kubernetes</a> 集群进行通信，这两者在实际上并没有太多的区别，后者也只是对 Kubernetes 提供的 RESTful API 进行封装并提供出来。每一个 <a href="https://link.juejin.cn/?target=http://mp.weixin.qq.com/s?__biz=MzI0MDQ4MTM5NQ==&mid=2247502359&idx=1&sn=8c16100c9731359b9864403183f44233&chksm=e918af0bde6f261da9f4960c0ed43e1552eeed9ff3ad0ba06bcfef75e3ba9e9d097e1c87a51c&scene=21%23wechat_redirect">Kubernetes</a> 集群都是由一组 Master 节点和一系列的 Worker 节点组成，其中 Master 节点主要负责存储集群的状态并为 Kubernetes 对象分配和调度资源。</p>
+<p>下面，以部署一个nginx服务来说明kubernetes系统各个组件调用关系：</p>
+<ul>
+<li><p>首先要明确，一旦kubernetes环境启动之后，master和node都会将自身的信息存储到etcd数据库中。</p>
+</li>
+<li><p>一个nginx服务的安装请求会首先被发送到master节点的apiServer组件。</p>
+</li>
+<li><p>apiServer组件会调用scheduler组件来决定到底应该把这个服务安装到哪个node节点上。</p>
+</li>
+<li><p>在此时，它会从etcd中读取各个node节点的信息，然后按照一定的算法进行选择，并将结果告知apiServer。</p>
+</li>
+<li><p>apiServer调用controller-manager去调度Node节点安装nginx服务。</p>
+</li>
+<li><p>kubelet接收到指令后，会通知docker，然后由docker来启动一个nginx的pod，pod是kubernetes的最小操作单元，容器必须跑在pod中。</p>
+</li>
+<li><p>至此，一个nginx服务就运行了，如果需要访问nginx，就需要通过kube-proxy来对pod产生访问的代理。</p>
+</li>
+</ul>
+<p>这样，外界用户就可以访问集群中的nginx服务了。</p>
+<h2 id="Service服务"><a href="#Service服务" class="headerlink" title="Service服务"></a>Service服务</h2><p>在k8s集群中，service是一个抽象概念，它通过一个虚拟的IP映射指定的端口，将代理客户端发来的请求转到后端一组pod中的一个上。</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>pod中的容器经常在不停地销毁和重建，因此pod的IP会不停的改变，如果客户端不知道pod的IP已经变化，继续访问之前的IP是无法访问容器。就算客户端知道了pod的IP变化了，每次重建后访问都需要更换IP，效率极为低下。</p>
+<h3 id="service代理服务的作用"><a href="#service代理服务的作用" class="headerlink" title="service代理服务的作用"></a>service代理服务的作用</h3><p>这时候就有了service代理服务，类似于nginx代理，作为客户端和pod的中间层，在通过service.yaml 创建service资源后，<strong>随机虚拟创建一个固定的ip和port</strong>，这时候再创建pod，比如deployment类型的nginx，service资源通过Label Selector（标签选择器）查找同名称空间下标签为刚才创建的deployment类型的名字为nginx资源进行绑定，就算pod不停地销毁和重建，并且不管有几个nginx的pod，都会跟这一个固定ip和port绑定，kubernetes内部会时刻更新这组关联关系，客户端访问固定ip和port，后端进行负载均衡机制分别访问不同的nginx的pod。pod的IP会不停的改变，但是service的ip和port不变。</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Pod%E3%80%81RC%E4%B8%8EService%E7%9A%84%E5%85%B3%E7%B3%BB.png" alt="Pod、RC与Service的关系"></p>
+<p>（ReplicationController 能够动态地创建和销毁 Pod（例如，需要进行扩缩容，或者执行）,保证Service的服务能力和服务质量始终处于预期的标准）</p>
+<blockquote>
+<p> Service的虚拟IP地址Cluster IP：外部网络无法ping通，只有kubernetes集群内部访问使用,但可以在各个node节点上直接通过ClusterIP:port访问。 </p>
+</blockquote>
+<h2 id="deployment"><a href="#deployment" class="headerlink" title="deployment"></a>deployment</h2><p>Deployment是K8s用于管理Pod的资源对象，用来保证K8s中Pod的多实例、高可用与滚动更新、灰度部署等。可以说，Deployment是K8s中最常用最有用的一个对象，多用来发布无状态的应用。Deployment 其实并不是直接控制 Pod 的，而是借助 ReplicaSet 来控制 Pod 的。</p>
+<h3 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h3><p>ReplicaSet 是 kubernetes 中的一种副本控制器资源，主要用于控制由其管理的Pod，使Pod副本的数量始终维持在预设的个数。</p>
+<h3 id="Deployment的两大功能"><a href="#Deployment的两大功能" class="headerlink" title="Deployment的两大功能"></a>Deployment的两大功能</h3><ul>
+<li><p>水平扩展 &#x2F; 收缩：Deployment Controller 只需要修改它所控制的 ReplicaSet 的 Pod 副本个数就可以了。比如，把这个值从 3 改成 4，那么 Deployment 所对应的 ReplicaSet，就会根据修改后的值自动创建一个新的 Pod。这就是“水平扩展”了；“水平收缩”则反之。</p>
+</li>
+<li><p>滚动更新：应用的发布和升级是运维最重要的核心职能之一，那么部署在K8S中的应用是怎么发布升级的呢？其实，你只要编辑修改下 Deployment 的 yaml 文件中镜像版本号，再 apply 一下，就更新成功了。</p>
+</li>
+</ul>
+<h3 id="Deployment常用字段解释"><a href="#Deployment常用字段解释" class="headerlink" title="Deployment常用字段解释"></a>Deployment常用字段解释</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>			<span class="comment"># API群组和版本</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span>			<span class="comment"># 资源类型</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="string">name</span> <span class="string">&lt;string&gt;</span>				<span class="comment"># 资源名称，名称空间中要唯一</span></span><br><span class="line">  <span class="string">namespace</span> <span class="string">&lt;string&gt;</span>		        <span class="comment"># 名称空间</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="string">minReadySeconds</span> <span class="string">&lt;integer&gt;</span>		<span class="comment"># Pod就绪后多少秒后没有容器crash才视为“就绪”</span></span><br><span class="line">  <span class="string">replicas</span> <span class="string">&lt;integer&gt;</span>			<span class="comment"># Pod副本数，默认为1</span></span><br><span class="line">  <span class="string">selector</span> <span class="string">&lt;object&gt;</span>			<span class="comment"># 标签选择器，必须和template字段中Pod的标签一致</span></span><br><span class="line">  <span class="string">template</span> <span class="string">&lt;object&gt;</span>			<span class="comment"># 定义Pod模板</span></span><br><span class="line"></span><br><span class="line">  <span class="string">revisionHistoryLimit</span> <span class="string">&lt;integer&gt;</span>	<span class="comment"># 滚动更新历史记录数量，默认为10</span></span><br><span class="line">  <span class="string">strategy</span> <span class="string">&lt;Object&gt;</span>			<span class="comment"># 滚动更新策略</span></span><br><span class="line">    <span class="string">type</span> <span class="string">&lt;string&gt;</span>			<span class="comment"># 滚动更新类型，默认为RollingUpdate</span></span><br><span class="line">    <span class="string">rollingUpdate</span> <span class="string">&lt;Object&gt;</span>		<span class="comment"># 滚动更新参数，只能用于RollingUpdate类型</span></span><br><span class="line">      <span class="string">maxSurge</span> <span class="string">&lt;string&gt;</span>			<span class="comment"># 更新期间可以比replicas定义的数量多出的数量或比例</span></span><br><span class="line">      <span class="string">maxUnavailable</span> <span class="string">&lt;string&gt;</span>		<span class="comment"># 更新期间可以比replicas定义的数少的数量或比例 </span></span><br><span class="line">  <span class="string">progressDeadlineSeconds</span> <span class="string">&lt;integer&gt;</span>	<span class="comment"># 滚动更新故障超时时长，默认为600秒</span></span><br><span class="line">  <span class="string">paused</span> <span class="string">&lt;boolean&gt;</span>			<span class="comment"># 是否暂停部署</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ingress"><a href="#ingress" class="headerlink" title="ingress"></a>ingress</h2><p>要理解ingress，需要区分两个概念，ingress和ingress-controller：</p>
+<p><strong>ingress对象：</strong> 指的是k8s中的一个api对象，一般用yaml配置。作用是定义请求如何转发到service的规则，可以理解为配置模板。</p>
+<p><strong>ingress-controller：</strong> 具体实现反向代理及负载均衡的程序，对ingress定义的规则进行解析，根据配置的规则来实现请求转发。</p>
+<h3 id="ingress工作原理"><a href="#ingress工作原理" class="headerlink" title="ingress工作原理"></a>ingress工作原理</h3><p>ingress controller通过和kubernetes api交互，动态的去感知集群中ingress规则变化，然后读取它，按照自定义的规则，规则就是写明了哪个域名对应哪个service，生成一段nginx配置，再写到nginx-ingress-controller的pod里，这个Ingress controller的pod里运行着一个Nginx服务，控制器会把生成的nginx配置写入&#x2F;etc&#x2F;nginx.conf文件中，然后reload一下使配置生效。以此达到域名分配置和动态更新的问题。</p>
+<h3 id="ingress的实现方式"><a href="#ingress的实现方式" class="headerlink" title="ingress的实现方式"></a>ingress的实现方式</h3><p>ingress-controller并不是k8s自带的组件，实际上ingress-controller只是一个统称，用户可以选择不同的ingress-controller实现，目前，由k8s维护的ingress-controller只有google云的GCE与ingress-nginx两个，其他还有很多第三方维护的ingress-controller。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/k8s/k8s%E7%AE%80%E4%BB%8B/" data-id="clktuzzfr0029cdoobthcc72s" data-title="k8s简介" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/docker/%E4%BD%BF%E7%94%A8docker%E6%90%AD%E5%BB%BAgo%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          使用docker搭建go开发环境
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/k8s/informer/informer%E6%9C%BA%E5%88%B6%E7%BB%84%E4%BB%B6delta_fifo%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">informer机制组件delta_fifo源码解读</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

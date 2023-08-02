@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>go-map | 胡椒粉的秋天</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="map定义Go语言中提供的映射关系容器为map，其内部使用散列表（hash）实现。map是一种无序的基于key-value的数据结构，Go语言中的map是引用类型，必须初始化才能使用。 map类型的变量默认初始值为nil，需要使用make()函数来分配内存。语法为： 1make(map[KeyType]ValueType, [cap])  其中cap表示map的容量，该参数虽然不是必须的，但是我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-map">
+<meta property="og:url" content="http://example.com/2023/08/02/GO/map/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="map定义Go语言中提供的映射关系容器为map，其内部使用散列表（hash）实现。map是一种无序的基于key-value的数据结构，Go语言中的map是引用类型，必须初始化才能使用。 map类型的变量默认初始值为nil，需要使用make()函数来分配内存。语法为： 1make(map[KeyType]ValueType, [cap])  其中cap表示map的容量，该参数虽然不是必须的，但是我们">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/sysc.Map%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:modified_time" content="2023-08-02T15:04:31.400Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="map">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/sysc.Map%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+  
+    <link rel="alternate" href="/atom.xml" title="胡椒粉的秋天" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胡椒粉的秋天</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-GO/map" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/08/02/GO/map/" class="article-date">
+  <time class="dt-published" datetime="2023-08-02T15:04:31.400Z" itemprop="datePublished">2023-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/GO/">GO</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      go-map
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="map定义"><a href="#map定义" class="headerlink" title="map定义"></a>map定义</h2><p>Go语言中提供的映射关系容器为<code>map</code>，其内部使用<code>散列表（hash）</code>实现。map是一种<strong>无序</strong>的基于<code>key-value</code>的数据结构，Go语言中的map是<strong>引用类型</strong>，必须初始化才能使用。</p>
+<p>map类型的变量默认初始值为nil，需要使用make()函数来分配内存。语法为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span>(<span class="keyword">map</span>[KeyType]ValueType, [<span class="built_in">cap</span>])</span><br></pre></td></tr></table></figure>
+
+<p>其中cap表示map的容量，该参数虽然不是必须的，但是我们应该在初始化map的时候就为其指定一个合适的容量。</p>
+<p>map作为函数参数使用时，由于是它是引用类型，所以函数里改变map值，函数外也会跟着改变。</p>
+<h2 id="map基本使用"><a href="#map基本使用" class="headerlink" title="map基本使用"></a>map基本使用</h2><p>map中的数据都是成对出现的，map的插入元素示例代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	scoreMap := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">int</span>, <span class="number">8</span>)</span><br><span class="line">	scoreMap[<span class="string">&quot;张三&quot;</span>] = <span class="number">90</span></span><br><span class="line">	scoreMap[<span class="string">&quot;小明&quot;</span>] = <span class="number">100</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>map也支持在声明的时候填充元素，例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	userInfo := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>&#123;</span><br><span class="line">		<span class="string">&quot;username&quot;</span>: <span class="string">&quot;xxx&quot;</span>,</span><br><span class="line">		<span class="string">&quot;password&quot;</span>: <span class="string">&quot;123456&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Go语言中有个判断map中键是否存在的优雅写法，格式如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> value, ok := <span class="keyword">map</span>[key]; ok &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Go语言中使用<code>for range</code>遍历map：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k, v := <span class="keyword">range</span> scoreMap &#123;</span><br><span class="line">    fmt.Println(k, v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> 遍历map时的元素顺序与添加键值对的顺序无关。</p>
+<h2 id="map底层概述"><a href="#map底层概述" class="headerlink" title="map底层概述"></a>map底层概述</h2><ul>
+<li><code>map</code> 只是一个哈希表。数据被排列成一组 <code>bucket</code>。</li>
+<li>每个 <code>bucket</code> 最多包含 <code>8</code> 个 <code>键/值</code> 对。</li>
+<li><strong>一个元素的哈希值的低位字节位用于选择 <code>bucket</code>，最高的 8 bit存放在桶的开头，用于后续产生哈希冲突时优先对比高8bit，再相同时才对比key。</strong></li>
+<li>每个 <code>bucket</code> 包含每个哈希的几个高位字节位(<code>tophash</code>)，以区分单个桶中的条目。</li>
+<li>如果超过 <code>8</code> 个 <code>key</code> 哈希到同一个桶，我们将额外的桶以链表的方式起来。（解决哈希冲突，链表法）</li>
+<li>当哈希表扩容时，我们会分配一个两倍大的新 <code>bucket</code> 数组。然后 <code>bucket</code> 从旧 <code>bucket</code> 数组增量复制到新 <code>bucket</code> 数组。</li>
+<li><code>map</code> 迭代器遍历 <code>bucket</code> 数组，并按遍历顺序返回键（遍历完普通桶之后，遍历溢出桶）。</li>
+<li>为了保持迭代语义，我们永远不会在它们的桶中移动键（<code>bucket</code> 内键的顺序在扩容的时候不变。如果改变了桶内键的相对顺序，键可能会返回 0 或 2 次）。</li>
+<li>在扩容哈希表时，迭代器仍在旧的桶中迭代，并且必须检查新桶，检查正在迭代的 <code>bucket</code> 是否已经被迁移到新桶。</li>
+</ul>
+<h2 id="go-map底层具体原理"><a href="#go-map底层具体原理" class="headerlink" title="go map底层具体原理"></a>go map底层具体原理</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7177582930313609273#heading-12">https://juejin.cn/post/7177582930313609273#heading-12</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/421607260">https://zhuanlan.zhihu.com/p/421607260</a></p>
+<h2 id="并发安全的sync-Map"><a href="#并发安全的sync-Map" class="headerlink" title="并发安全的sync.Map"></a>并发安全的sync.Map</h2><p>如果要保证并发的安全，最朴素的想法就是使用锁，但是这意味着要把一些并发的操作强制串行化，性能自然就会下降。</p>
+<h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>事实上，除了使用锁，还有一个办法，也可以达到类似并发安全的目的，就是原子操作（atomic）。sync.Map的设计非常巧妙，充分利用了atmoic的尽量使用原子操作和mutex的配合，最大程度上减少了锁的使用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Map <span class="keyword">struct</span> &#123;</span><br><span class="line">	mu Mutex</span><br><span class="line">	read atomic.Value <span class="comment">// readOnly</span></span><br><span class="line">    dirty <span class="keyword">map</span>[<span class="keyword">interface</span>&#123;&#125;]*entry</span><br><span class="line">	misses <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> readOnly <span class="keyword">struct</span> &#123;</span><br><span class="line">	m       <span class="keyword">map</span>[<span class="keyword">interface</span>&#123;&#125;]*entry</span><br><span class="line">	amended <span class="type">bool</span> <span class="comment">//是否修改， true if the dirty map contains some key not in m.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// An entry is a slot in the map corresponding to a particular key.</span></span><br><span class="line"><span class="keyword">type</span> entry <span class="keyword">struct</span> &#123;</span><br><span class="line">	p unsafe.Pointer <span class="comment">// *interface&#123;&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用了两个原生的map作为存储介质，分别是read map和dirty map（只读字典和脏字典）。</p>
+<ul>
+<li><p>只读字典使用atomic.Value来承载，保证原子性和高性能；脏字典则需要用互斥锁来保护，保证了互斥。</p>
+</li>
+<li><p>只读字典和脏字典中的键值对集合并不是实时同步的，它们在某些时间段内可能会有不同。</p>
+</li>
+<li><p>无论是read还是dirty，本质上都是map[interface{}]*entry类型，这里的entry其实就是Map的value的容器。</p>
+</li>
+<li><p>entry的本质，是一层封装，可以表示具体值的指针，也可以表示key已删除的状态（即逻辑假删除）</p>
+</li>
+</ul>
+<h3 id="架构设计图"><a href="#架构设计图" class="headerlink" title="架构设计图"></a>架构设计图</h3><p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/sysc.Map%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="sysc.Map底层数据结构原理图"></p>
+<ul>
+<li><p>read map由于是原子包托管，主要负责高性能，但是无法保证拥有全量的key（因为对于新增key，会首先加到dirty中），所以read某种程度上，类似于一个key的快照。</p>
+</li>
+<li><p><strong>dirty map拥有全量的key</strong>，当Store操作要新增一个之前不存在的key的时候，预先是增加自dirty中的。</p>
+</li>
+<li><p>在查找指定的key的时候，总会先去只读字典中寻找，并不需要锁定互斥锁。只有当read中没有，但dirty中可能会有这个key的时候，才会在锁的保护下去访问dirty。</p>
+</li>
+<li><p>在存储键值对的时候，只要read中已存有这个key，并且该键值对未被标记为“expunged”，就会把新值存到里面并直接返回，这种情况下也不需要用到锁。</p>
+</li>
+<li><p>expunged和nil，都表示标记删除，但是它们是有区别的，简单说expunged是read独有的，而nil则是read和dirty共有的。</p>
+</li>
+<li><p>read和map的关系，是一直在动态变化的，可能存在重叠，也可能是某一方为空；重叠的公共部分，由分为两种情况，nil和normal。</p>
+</li>
+<li><p>read和dirty之间是会互相转换的，在dirty中查找key对次数足够多的时候，sync.Map会把dirty直接作为read，即触发dirty&#x3D;&gt;read升级。同时在某些情况，也会出现read&#x3D;&gt;dirty的重塑</p>
+</li>
+</ul>
+<p>更多read和dirty转换的细节参考<a target="_blank" rel="noopener" href="https://view.inews.qq.com/a/20220613A08UDG00">https://view.inews.qq.com/a/20220613A08UDG00</a></p>
+<h3 id="sync-Map基本使用"><a href="#sync-Map基本使用" class="headerlink" title="sync.Map基本使用"></a>sync.Map基本使用</h3><ol>
+<li>Load：会从read和dirty两个中拿，如果read有且dirty中没有修改过，判断该条记录的状态如果是nil或者expunged（dirty中被删掉）则返回获取不到，其他状态返回read中的值；如果read中没有且dirty中修改，就加锁并从dirty中拿，并把missed字段+1,同步dirty到read,dirty&#x3D;nil.</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Map)</span></span> Load(key <span class="keyword">interface</span>&#123;&#125;) (value <span class="keyword">interface</span>&#123;&#125;, ok <span class="type">bool</span>) &#123;</span><br><span class="line">    read, _ := m.read.Load().(readOnly)</span><br><span class="line">    e, ok := read.m[key]</span><br><span class="line">    <span class="keyword">if</span> !ok &amp;&amp; read.amended &#123;</span><br><span class="line">        m.mu.Lock()</span><br><span class="line">        <span class="comment">// 可能锁等待的时候read中已经有该key了，所以做二次检查</span></span><br><span class="line">        read, _ = m.read.Load().(readOnly)</span><br><span class="line">        e, ok = read.m[key]</span><br><span class="line">        <span class="keyword">if</span> !ok &amp;&amp; read.amended &#123;</span><br><span class="line">            e, ok = m.dirty[key]</span><br><span class="line">            <span class="comment">// Regardless of whether the entry was present, record a miss: this key</span></span><br><span class="line">            <span class="comment">// will take the slow path until the dirty map is promoted to the read</span></span><br><span class="line">            <span class="comment">// map.</span></span><br><span class="line">            m.missLocked() <span class="comment">//misses计数+1，且如果misses小于dirty的长度，dirty同步到read，dirty=nil</span></span><br><span class="line">        &#125;</span><br><span class="line">        m.mu.Unlock()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> !ok &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> e.load() </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Map)</span></span> missLocked() &#123;</span><br><span class="line">	m.misses++</span><br><span class="line">	<span class="keyword">if</span> m.misses &lt; <span class="built_in">len</span>(m.dirty) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	m.read.Store(readOnly&#123;m: m.dirty&#125;)</span><br><span class="line">	m.dirty = <span class="literal">nil</span></span><br><span class="line">	m.misses = <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Store：如果read中存在key且尝试更新成功（p不是expaunged状态，即在dirty中被删掉）,返回即可 否则加锁，并再次检查read中有没有该key,有可能加锁的时候read中已经被同步了该key了。 如果read中有key而之前没有，说明从dirty中同步过来一波，如果p是expunged,就把p设置成nil并且dirty中加入entry 如果read中没有dirty中有，直接存储 如果read中没有dirty中也没有，如果read和dirty中是一样的没有修改过，如果dirty为nil，同步read到dirty,存储到dirty,并且修改read的属性字段amend设置成修改过true。</li>
+<li>Read：如果read中不存在key且read和dirty中不一致，上锁，再次检查read,如果还是如此，删除dirty中的key 如果read中存在key,如果entry.p为nil或者expunged，返回false,如果不是，entry.p设置成nil，标记删除。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>sync.Map中有read与dirty,操作dirty需要锁</p>
+</li>
+<li><p>每次判断完read有无key之后进行进行加锁操作后还需要再次判断read有无key，防止在此时间内进行了从dirty同步到read操作，然后操作dirty</p>
+</li>
+<li><p>load场景中主要从read读，没有再从dirty读，同时会计数，如果数量超过一定量，数据从dirty同步到read</p>
+</li>
+<li><p>其中有两处read和dirty互相同步的地方，在store场景主要存到dirty, 如果dirty中有直接更新，当dirty为nil的时候会把read中不是expunged状态的同步到dirty；dirty什么时候为nil呢，在load的时候从dirty中读的次数太多的时候会把dirty同步到read，并且dirty&#x3D;nil</p>
+</li>
+<li><p>删除为标记删除，把entry.p&#x3D;nil来标记。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/02/GO/map/" data-id="clktuzzf9001fcdoo0rxoayyk" data-title="go-map" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/map/" rel="tag">map</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/GO/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          go设计模式的实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/02/GO/option%E9%80%89%E9%A1%B9%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">go-option选项模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GO/">GO</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/">优雅写作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BC%98%E9%9B%85%E5%86%99%E4%BD%9C/%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA/">图床搭建</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">全文搜索引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitMap/" rel="tag">BitMap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-11/" rel="tag">C++11</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySql/" rel="tag">MySql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/" rel="tag">map</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vector/" rel="tag">vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%A8%E5%85%B5/" rel="tag">哨兵</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="tag">负载均衡</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/BitMap/" style="font-size: 10px;">BitMap</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/C-11/" style="font-size: 10px;">C++11</a> <a href="/tags/MySql/" style="font-size: 13.33px;">MySql</a> <a href="/tags/Redis/" style="font-size: 20px;">Redis</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/go/" style="font-size: 16.67px;">go</a> <a href="/tags/k8s/" style="font-size: 13.33px;">k8s</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/vector/" style="font-size: 10px;">vector</a> <a href="/tags/%E5%93%A8%E5%85%B5/" style="font-size: 10px;">哨兵</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">多线程</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">负载均衡</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 13.33px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/08/02/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/">nginx</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/">Reactor 和 Proactor</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/02/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">项目代码分层结构</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 pepper<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
