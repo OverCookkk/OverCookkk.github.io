@@ -2,7 +2,7 @@
 title: nginx
 #tags: [负载均衡]      #添加的标签
 categories: 
-  - 后端
+  - 中间件
 description: 
 #cover: 
 ---
