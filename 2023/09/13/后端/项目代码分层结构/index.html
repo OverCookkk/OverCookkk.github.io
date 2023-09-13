@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>项目代码分层结构 | 胡椒粉的秋天</title><meta name="author" content="pepper"><meta name="copyright" content="pepper"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="后端服务代码分层结构介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目代码分层结构">
+<meta property="og:url" content="http://example.com/2023/09/13/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="后端服务代码分层结构介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84-cover.jpg">
+<meta property="article:published_time" content="2023-09-13T15:21:17.667Z">
+<meta property="article:modified_time" content="2023-09-13T15:21:17.667Z">
+<meta property="article:author" content="pepper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/hu-zhihong/picbed/raw/master/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84-cover.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/09/13/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '项目代码分层结构',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-13 15:21:17'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/OverCookkk/css/background.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">73</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://gitee.com/hu-zhihong/picbed/raw/master/项目代码分层结构-cover.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">胡椒粉的秋天</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">项目代码分层结构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-13T15:21:17.667Z" title="更新于 2023-09-13 15:21:17">2023-09-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="项目代码分层结构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="通常的项目总体结构"><a href="#通常的项目总体结构" class="headerlink" title="通常的项目总体结构"></a>通常的项目总体结构</h2><p>以Spring Boot典型项目结构为例，创建出来的项目应该总体分为三大层：</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Spring_Boot%E5%85%B8%E5%9E%8B%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84.png" alt="Spring_Boot典型项目结构"></p>
+<ul>
+<li><code>项目根目录/src/main/java</code>：放置项目Java源代码</li>
+<li><code>项目根目录/src/main/resources</code>：放置项目静态资源和配置文件</li>
+<li><code>项目根目录/src/test/java</code>：放置项目测试用例代码</li>
+</ul>
+<h2 id="项目结构划分总结"><a href="#项目结构划分总结" class="headerlink" title="项目结构划分总结"></a>项目结构划分总结</h2><p>如果从一个用户访问一个网站的情况来看，对应着上面的项目代码结构来分析，可以贯穿整个代码分层：</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82.png" alt="后端服务代码分层"></p>
+<p>对应代码目录的流转逻辑就是：</p>
+<p><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E6%B5%81%E8%BD%AC%E9%80%BB%E8%BE%91.jpg" alt="后端服务代码分层流转逻辑"></p>
+<p>各个目录详细介绍：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">|_annotation：放置项目自定义注解</span><br><span class="line">|_aspect：放置切面代码</span><br><span class="line">|_config：放置配置类</span><br><span class="line">|_constant：放置常量、枚举等定义</span><br><span class="line">   |__constnt：存放常量定义</span><br><span class="line">   |__enums：存放枚举定义</span><br><span class="line">|_controller：放置控制器代码</span><br><span class="line">|_filter：放置一些过滤、拦截相关的代码</span><br><span class="line">|_mapper：放置数据访问层代码接口</span><br><span class="line">|_model：放置数据模型代码</span><br><span class="line">   |__entity：放置数据库实体对象定义</span><br><span class="line">   |__dto：存放数据传输对象定义</span><br><span class="line">   |__vo：存放显示层对象定义</span><br><span class="line">|_service：放置具体的业务逻辑代码（接口和实现分离）</span><br><span class="line">   |__intf：存放业务逻辑接口定义</span><br><span class="line">   |__impl：存放业务逻辑实际实现</span><br><span class="line">|_utils：放置工具类和辅助代码</span><br></pre></td></tr></table></figure>
+
+<p>然后接下来<code>/src/main/resources</code>目录，里面主要存放静态配置文件和页面静态资源等东西：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">|_mapper：存放mybatis的XML映射文件（如果是mybatis项目）</span><br><span class="line">|_static：存放网页静态资源，比如下面的js/css/img</span><br><span class="line">   |__js：</span><br><span class="line">   |__css：</span><br><span class="line">   |__img：</span><br><span class="line">   |__font：</span><br><span class="line">   |__等等</span><br><span class="line">|_template：存放网页模板，比如thymeleaf/freemarker模板等</span><br><span class="line">   |__header</span><br><span class="line">   |__sidebar</span><br><span class="line">   |__bottom</span><br><span class="line">   |__XXX.html等等</span><br><span class="line">|_application.yml       基本配置文件</span><br><span class="line">|_application-dev.yml   开发环境配置文件</span><br><span class="line">|_application-test.yml  测试环境配置文件</span><br><span class="line">|_application-prod.yml  生产环境配置文件</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>DO（Data Object）</code>：与数据库表结构一一对应，通过DAO层向上传输数据源对象。</p>
+</li>
+<li><p><code>DTO（Data Transfer Object）</code>：数据传输对象，Service或Manager向外传输的对象。</p>
+</li>
+<li><p><code>BO（Business Object）</code>：业务对象。由Service层输出的封装业务逻辑的对象。</p>
+</li>
+<li><p><code>AO（Application Object）</code>：应用对象。在Web层与Service层之间抽象的复用对象模型，极为贴近展示层，复用度不高。</p>
+</li>
+<li><p><code>VO（View Object）</code>：显示层对象，通常是Web向模板渲染引擎层传输的对象。</p>
+</li>
+<li><p><code>Query</code>：数据查询对象，各层接收上层的查询请求。注意超过2个参数的查询封装，禁止使用Map类来传输。</p>
+</li>
+</ul>
+<h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h2><p>1、<code>Contorller</code>层参数传递建议不要使用<code>HashMap</code>，建议使用数据模型定义</p>
+<p>2、<code>Controller</code>层里可以做参数校验、异常抛出等操作，但建议不要放太多业务逻辑，业务逻辑尽量放到<code>Service</code>层代码中去做</p>
+<p>3、<code>Service</code>层做实际业务逻辑，可以按照功能模块做好定义和区分，相互可以调用</p>
+<p>4、功能模块<code>Service</code>之间引用时，建议不要渗透到<code>DAO</code>层（或者<code>mapper</code>层），基于<code>Service</code>层进行调用和复用比较合理</p>
+<p>5、业务逻辑层<code>Service</code>和数据库<code>DAO</code>层的操作对象不要混用。<code>Controller</code>层的数据对象不要直接渗透到<code>DAO</code>层（或者<code>mapper</code>层）；同理数据表实体对象<code>Entity</code>也不要直接传到<code>Controller</code>层进行输出或展示。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">pepper</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/09/13/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/">http://example.com/2023/09/13/%E5%90%8E%E7%AB%AF/%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">胡椒粉的秋天</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://gitee.com/hu-zhihong/picbed/raw/master/项目代码分层结构-cover.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/13/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"><img class="prev-cover" src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">负载均衡</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91/"><img class="next-cover" src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">二叉树</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">pepper</div><div class="author-info__description"></div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">73</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E5%B8%B8%E7%9A%84%E9%A1%B9%E7%9B%AE%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">通常的项目总体结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E5%88%92%E5%88%86%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">项目结构划分总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.</span> <span class="toc-text">一些注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" title="无题"><img src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/09/13/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" title="无题">无题</a><time datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx"><img src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="nginx"/></a><div class="content"><a class="title" href="/2023/09/13/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx">nginx</a><time datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪"><img src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="链路追踪"/></a><div class="content"><a class="title" href="/2023/09/13/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪">链路追踪</a><time datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor"><img src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reactor 和 Proactor"/></a><div class="content"><a class="title" href="/2023/09/13/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor">Reactor 和 Proactor</a><time datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡"><img src="https://gitee.com/hu-zhihong/picbed/raw/master/beach-1851101_1920.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="负载均衡"/></a><div class="content"><a class="title" href="/2023/09/13/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡">负载均衡</a><time datetime="2023-09-13T15:21:17.667Z" title="发表于 2023-09-13 15:21:17">2023-09-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By pepper</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
