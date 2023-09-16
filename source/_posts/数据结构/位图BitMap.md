@@ -3,7 +3,7 @@ title: 位图BitMap
 tags: [BitMap]      #添加的标签
 categories: 数据结构
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00704-422707416.png
 ---
 
 

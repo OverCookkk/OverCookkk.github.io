@@ -1,9 +1,11 @@
 ---
 title: Redis高可用篇：Cluster 集群原理
 tags: [Redis]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00716-77064882.png
 ---
 
 
@@ -29,7 +31,7 @@ Redis 集群是一种分布式数据库方案，集群通过分片（sharding）
 
 它是去中心化的，如图所示，该集群有三个 Redis 节点组成，每个节点负责整个集群的一部分数据，每个节点负责的数据多少可能不一样。
 
-![Redis集群架构](https://gitee.com/hu-zhihong/picbed/raw/master/Redis%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg)
+![Redis集群架构](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Redis%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg)
 
 三个节点相互连接组成一个对等的集群，它们之间通过 `Gossip`协议相互交互集群信息，最后每个节点都保存着其他节点的 slots 分配情况。
 

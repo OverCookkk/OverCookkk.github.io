@@ -1,9 +1,11 @@
 ---
 title: MySql索引
 tags: [MySql]      #添加的标签
-categories: MySql
-description: 
-#cover: 
+categories: 
+  - 中间件
+  - MySql
+description: 索引（在MySQL中也叫“键key”）是存储引擎快速找到记录的一种数据结构
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00707-1950088302.png
 ---
 
 
@@ -28,7 +30,7 @@ description:
    );
    ```
 
-![MySql主键索引](https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png)
+![MySql主键索引](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png)
 
 2. 唯一索引 UNIQUE：唯一索引列的值必须唯一，但允许有空值。如果是组合索引，则列值的组合必须唯一（每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束）。可以通过`ALTER TABLE 表名 ADD UNIQUE (列名);`创建唯一索引；可以通过`ALTER TABLE 表名 ADD UNIQUE (列名1,列名2);`；也可以在创建表的时候使用语句`KEY type (type)`创建索引。
 
@@ -44,19 +46,19 @@ description:
 
 创建组合索引结果如下：
 
-![MySql唯一索引](https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95.png)
+![MySql唯一索引](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/MySql%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95.png)
 
 
 
 3. 普通索引 INDEX：这是最基本的索引，它没有任何限制，它与唯一索引在查询能力上是没差别的，主要考虑的是对更新性能的影响。**注意，如果索引是用B+树结构，则B+树的每个叶子节点都是主键值，因为这样可以节省存储空间以及保证一致性**。可以通过`ALTER TABLE 表名 ADD INDEX index_name (列名);`创建普通索引：
 
-![MySql普通索引](https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95.png)
+![MySql普通索引](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/MySql%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95.png)
 
 
 
 4. 组合索引 INDEX：即一个索引包含多个列，多用于避免回表查询。可以通过`ALTER TABLE 表名 ADD INDEX index_name(column1,column2,column3);`创建组合索引，它可以支持最左前缀原则，所以联合索引需要合理安排字段的前后顺序。
 
-   ![（name，age）索引示意图](https://gitee.com/hu-zhihong/picbed/raw/master/%EF%BC%88name%EF%BC%8Cage%EF%BC%89%E7%B4%A2%E5%BC%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
+   ![（name，age）索引示意图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%EF%BC%88name%EF%BC%8Cage%EF%BC%89%E7%B4%A2%E5%BC%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
 
    
 
@@ -82,7 +84,7 @@ DROP INDEX index_name ON table_name;删除索引。
 
 有些时候虽然数据库有索引，但是并不被优化器选择使用。我们可以通过SHOW STATUS LIKE 'Handler_read%';查看索引的使用情况：
 
-![MySql索引使用情况](https://gitee.com/hu-zhihong/picbed/raw/master/MySql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5.png)
+![MySql索引使用情况](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/MySql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5.png)
 
 **Handler_read_key**：如果索引正在工作，Handler_read_key的值将很高。
 **Handler_read_rnd_next**：数据文件中读取下一行的请求数，如果正在进行大量的表扫描，值将较高，则说明索引利用不理想。

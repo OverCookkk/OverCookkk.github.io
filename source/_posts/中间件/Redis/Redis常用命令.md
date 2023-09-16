@@ -1,9 +1,11 @@
 ---
 title: Redis常见数据类型与命令
 tags: [Redis]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00710-282749920.png
 ---
 
 
@@ -145,11 +147,11 @@ description:
 
    批量操作命令可以有效提高开发效率，如果使用get命令批量获取n个值，则需要耗时：<u>n次get时间 = n次网络时间 + n次命令时间</u>，模型如下：
 
-   ![redis n次get的模型](https://gitee.com/hu-zhihong/picbed/raw/master/redis%20n%E6%AC%A1get%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
+   ![redis n次get的模型](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%20n%E6%AC%A1get%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
 
    使用mget命令后，需要耗时：<u>n次get时间 = 1次网络时间 + n次命令时间</u>，模型如下：
 
-   ![redis 一次mget的模型](https://gitee.com/hu-zhihong/picbed/raw/master/redis%20%E4%B8%80%E6%AC%A1mget%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
+   ![redis 一次mget的模型](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%20%E4%B8%80%E6%AC%A1mget%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
 
 5. 计数
 
@@ -167,7 +169,7 @@ description:
 
 字符串类型命令时间复杂度如下：
 
-![redis字符串类型命令时间复杂度](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
+![redis字符串类型命令时间复杂度](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
 
 
 
@@ -189,7 +191,7 @@ Redis会根据当前值的类型和长度决定使用哪种内部编码实现。
 
 在Redis中，哈希类型是指键值本身又是一个键值对结构，形如`value={{field1，value1}，...{fieldN， valueN}}`，Redis键值对和哈希类型二者的关系如下图：
 
-![redis哈希类型关系](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E5%85%B3%E7%B3%BB.png)
+![redis哈希类型关系](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E5%85%B3%E7%B3%BB.png)
 
 ### 命令
 
@@ -252,7 +254,7 @@ Redis会根据当前值的类型和长度决定使用哪种内部编码实现。
 
 哈希类型命令的时间复杂度如下：
 
-![redis哈希类型命令的时间复杂度](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
+![redis哈希类型命令的时间复杂度](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E5%91%BD%E4%BB%A4%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
 
 
 
@@ -309,7 +311,7 @@ Redis会根据当前值的类型和长度决定使用哪种内部编码实现。
 
 哈希类型命令的时间复杂度如下：
 
-![列表命令时间复杂度](https://gitee.com/hu-zhihong/picbed/raw/master/%E5%88%97%E8%A1%A8%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
+![列表命令时间复杂度](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E5%88%97%E8%A1%A8%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
 
 
 
@@ -324,7 +326,7 @@ Redis会根据当前值的类型和长度决定使用哪种内部编码实现。
 
 集合（set）类型也是用来保存多个的字符串元素，但和列表类型不一样的是，**集合中不允许有重复元素，并且集合中的元素是无序的，不能通过索引下标获取元素**。一个集合最多可以存储2^32-1个元素。
 
-![redis中set的模型](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E4%B8%ADset%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
+![redis中set的模型](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E4%B8%ADset%E7%9A%84%E6%A8%A1%E5%9E%8B.png)
 
 
 
@@ -408,7 +410,7 @@ Redis会根据当前值的类型和长度决定使用哪种内部编码实现。
 
 哈希类型命令的时间复杂度如下：
 
-![redis中set常用命令时间复杂度](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E4%B8%ADset%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
+![redis中set常用命令时间复杂度](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E4%B8%ADset%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6.png)
 
 ### 内部编码
 

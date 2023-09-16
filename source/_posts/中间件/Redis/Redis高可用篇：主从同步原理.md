@@ -1,9 +1,11 @@
 ---
 title: Redis高可用篇：主从同步原理
 tags: [Redis,高可用]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 主从同步实现redis的高可用性。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00712-2369818868.png
 ---
 
 
@@ -21,6 +23,6 @@ redis提供了主从库模式，以保证数据副本的一致，主从库之间
 - 读操作：主库、从库都可以接收；
 - 写操作：首先到主库执行，然后，主库将写操作同步给从库。
 
-![redis主从复制的读写分离](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.png)
+![redis主从复制的读写分离](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.png)
 
 如果主从库都能接收客户端的写操作，就会导致主从库的数据不一致，除非使用加锁等操作，但是加锁会带来巨额的开销。

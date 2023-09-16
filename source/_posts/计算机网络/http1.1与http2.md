@@ -5,7 +5,7 @@ categories:
   - 计算机网络
   #- http
 description: http/1.1与http/2的区别与原理
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00698-1903398178.png
 ---
 
 

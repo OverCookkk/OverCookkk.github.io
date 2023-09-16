@@ -1,9 +1,11 @@
 ---
 title: Redis高可用篇：哨兵集群原理
 tags: [Redis,高可用,哨兵]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 哨兵用于监控redis主从库的情况。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00711-384941742.png
 ---
 
 
@@ -18,7 +20,7 @@ description: 哨兵用于监控redis主从库的情况。
 
 搭建实例采用三个哨兵形成集群，三个数据节点（一主两从）方式搭建，如下图所示：
 
-![Redis哨兵集群](https://gitee.com/hu-zhihong/picbed/raw/master/Redis%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4.png)
+![Redis哨兵集群](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Redis%E5%93%A8%E5%85%B5%E9%9B%86%E7%BE%A4.png)
 
 哨兵是 Redis 的一种运行模式，它专注于**对 Redis 实例（主节点、从节点）运行状态的监控，并能够在主节点发生故障时通过一系列的机制实现选主及主从切换，实现故障转移，确保整个 Redis 系统的可用性**。Redis 哨兵具备的能力有如下几个：
 
@@ -26,7 +28,7 @@ description: 哨兵用于监控redis主从库的情况。
 - **自动切换主库**：当 Master 运行故障，哨兵启动自动故障恢复流程：从 slave 中选择一台作为新 master。
 - **通知**：让 slave 执行 replicaof（复制），与新的 master 同步；并且通知客户端与新 master 建立连接。
 
-![redis哨兵执行任务与目标](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%93%A8%E5%85%B5%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E7%9B%AE%E6%A0%87.png)
+![redis哨兵执行任务与目标](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%93%A8%E5%85%B5%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E4%B8%8E%E7%9B%AE%E6%A0%87.png)
 
 ### 监控
 
@@ -44,7 +46,7 @@ PING 命令的回复有两种情况：
 
 只有 master 被判定为「客观下线」，才会进一步触发哨兵开始主从切换流程。
 
-![redis哨兵的客观下线](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%93%A8%E5%85%B5%E7%9A%84%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF.png)
+![redis哨兵的客观下线](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%93%A8%E5%85%B5%E7%9A%84%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF.png)
 
 
 
@@ -52,7 +54,7 @@ PING 命令的回复有两种情况：
 
 「哨兵」的第二个任务，选择新 master 。需要从slave中按照一定规则选择一个合适的从库作为主库。按照一定的 **「筛选条件」 + 「打分」** 策略，选出master。
 
-![redis新master选择](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E6%96%B0master%E9%80%89%E6%8B%A9.png)
+![redis新master选择](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E6%96%B0master%E9%80%89%E6%8B%A9.png)
 
 
 
@@ -74,4 +76,4 @@ master 有一个 `__sentinel__:hello` 的专用通道，用于哨兵之间发布
 
 如下图所示，哨兵 2 向 Master 发送 `INFO` 命令，Master 就把 slave 列表返回给哨兵 2，哨兵 2 便根据 slave 列表连接信息与每一个 slave 建立连接，并基于此连接实现持续监控。剩下的哨兵也同理基于此实现监控。
 
-![redis哨兵与master以及slave连接图](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%93%A8%E5%85%B5%E4%B8%8Emaster%E4%BB%A5%E5%8F%8Aslave%E8%BF%9E%E6%8E%A5%E5%9B%BE.png)
+![redis哨兵与master以及slave连接图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%93%A8%E5%85%B5%E4%B8%8Emaster%E4%BB%A5%E5%8F%8Aslave%E8%BF%9E%E6%8E%A5%E5%9B%BE.png)

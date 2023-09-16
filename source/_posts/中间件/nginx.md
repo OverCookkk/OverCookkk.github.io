@@ -4,7 +4,7 @@ title: nginx
 categories: 
   - 中间件
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00730-647474016.png
 ---
 
 

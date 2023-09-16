@@ -1,9 +1,11 @@
 ---
 title: 用Redis的数据结构实现亿级数据统计
 tags: [Redis,Bitmap]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: redis不同数据结构的应用场景不同，本文将介绍面对不同的业务场景，选择合适的数据结构使得统计数据更加的高效。
-cover: https://gitee.com/hu-zhihong/picbed/raw/master/用Redis的Bitmap实现亿级数据统计-cover.jpg
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00709-2393217881.png
 ---
 
 
@@ -43,7 +45,7 @@ Bitmap 的底层数据结构用的是 String 类型的 SDS 数据结构来保存
 
 可以将 Bitmap 看成是一个 bit 为单位的数组，数组的每个单元只能存储 0 或者 1，数组的下标在 Bitmap 中叫做 offset 偏移量。
 
-![Bitmap底层结构图](https://gitee.com/hu-zhihong/picbed/raw/master/Bitmap%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
+![Bitmap底层结构图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Bitmap%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%E5%9B%BE.jpg)
 
 
 

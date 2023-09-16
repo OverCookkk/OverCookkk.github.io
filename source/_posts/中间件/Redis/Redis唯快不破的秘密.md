@@ -1,9 +1,11 @@
 ---
 title: Redis唯快不破的秘密
 tags: [Redis]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00723-77064873.png
 ---
 
 
@@ -34,13 +36,13 @@ MySQL 为了提高检索速度使用了 B+ Tree 数据结构，所以 Redis 速�
 
 当然是为了追求速度，不同数据类型使用不同的数据结构速度才得以提升。每种数据类型都有一种或者多种数据结构来支撑，底层数据结构有 6 种。
 
-![Redis数据类型与底层数据结构关系](https://gitee.com/hu-zhihong/picbed/raw/master/Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%85%B3%E7%B3%BB.png)
+![Redis数据类型与底层数据结构关系](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%85%B3%E7%B3%BB.png)
 
 ### Redis hash 字典
 
 Redis 整体就是一个哈希表来保存所有的键值对，无论数据类型是 5 种的任意一种。哈希表，本质就是一个数组，每个元素被叫做哈希桶，不管什么数据类型，每个桶里面的 entry 保存着实际具体值的指针。
 
-![Redis全局哈希表](https://gitee.com/hu-zhihong/picbed/raw/master/Redis%E5%85%A8%E5%B1%80%E5%93%88%E5%B8%8C%E8%A1%A8.png)
+![Redis全局哈希表](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Redis%E5%85%A8%E5%B1%80%E5%93%88%E5%B8%8C%E8%A1%A8.png)
 
 整个数据库就是一个**全局哈希表**，而哈希表的时间复杂度是 O(1)，只需要计算每个键的哈希值，便知道对应的哈希桶位置，定位桶里面的 entry 找到对应数据，这个也是 Redis 快的原因之一。
 
@@ -68,7 +70,7 @@ C 语言中字符串的获取 「MageByte」的长度，要从头开始遍历，
 
 C 语言字符串结构与 SDS 字符串结构对比图如下所示：
 
-![C 语言字符串与SDS](https://gitee.com/hu-zhihong/picbed/raw/master/C%20%E8%AF%AD%E8%A8%80%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8ESDS.png)
+![C 语言字符串与SDS](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/C%20%E8%AF%AD%E8%A8%80%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8ESDS.png)
 
 两者的区别：
 
@@ -95,7 +97,7 @@ struct ziplist<T> {
 }
 ```
 
-![redis的ziplist](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E7%9A%84ziplist.png)
+![redis的ziplist](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E7%9A%84ziplist.png)
 
 如果我们要查找定位第一个元素和最后一个元素，可以通过表头三个字段的长度直接定位，复杂度是 O(1)。而查找其他元素时，就没有这么高效了，只能逐个查找，此时的复杂度就是 O(N)
 
@@ -109,7 +111,7 @@ Redis List 数据类型通常被用于队列、微博关注人时间轴列表等
 
 **quicklist 是 ziplist 和 linkedlist 的混合体，它将 linkedlist 按段切分，每一段使用 ziplist 来紧凑存储，多个 ziplist 之间使用双向指针串接起来。**
 
-![redis的quicklist](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E7%9A%84quicklist.png)
+![redis的quicklist](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E7%9A%84quicklist.png)
 
 
 
@@ -123,7 +125,7 @@ sorted set 类型的排序功能便是通过「跳跃列表」数据结构来实
 
 跳表在链表的基础上，增加了多层级索引，通过索引位置的几个跳转，实现数据的快速定位，如下图所示：
 
-![跳跃表](https://gitee.com/hu-zhihong/picbed/raw/master/%E8%B7%B3%E8%B7%83%E8%A1%A8.png)
+![跳跃表](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E8%B7%B3%E8%B7%83%E8%A1%A8.png)
 
 当需要查找 40 这个元素需要经历三次查找。
 

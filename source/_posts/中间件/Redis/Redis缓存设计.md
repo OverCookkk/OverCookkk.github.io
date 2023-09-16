@@ -1,9 +1,11 @@
 ---
 title: Redis缓存设计
 tags: [Redis,缓存]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 使用Redis作为缓存，不仅能加速读写速度，还能降低后端负载。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00717-1497735301.png
 ---
 
 
@@ -182,7 +184,7 @@ tips:GitHub上已经开源了类似的方案，可以进行参考：https://gith
 
    此方法只允许一个线程重建缓存，其他线程等待重建缓存的线程执行完，重新从缓存获取数据即可。（使用setnx命令实现上述功能）
 
-   ![使用互斥重建缓存](https://gitee.com/hu-zhihong/picbed/raw/master/%E4%BD%BF%E7%94%A8%E4%BA%92%E6%96%A5%E9%87%8D%E5%BB%BA%E7%BC%93%E5%AD%98.png)
+   ![使用互斥重建缓存](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/%E4%BD%BF%E7%94%A8%E4%BA%92%E6%96%A5%E9%87%8D%E5%BB%BA%E7%BC%93%E5%AD%98.png)
 
 2. **缓存过期时间不设置**
 

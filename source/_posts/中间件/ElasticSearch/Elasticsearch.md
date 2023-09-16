@@ -2,9 +2,10 @@
 title: Elasticsearch
 #tags: []      #添加的标签
 categories: 
-  - 全文搜索引擎
-#description: 
-#cover: 
+  - 中间件
+  - elasticsearch
+description: 全文搜索引擎是目前广泛应用的主流搜索引擎
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00706-1772420198.png
 ---
 
 

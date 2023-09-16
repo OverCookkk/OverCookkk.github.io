@@ -4,7 +4,7 @@ title: 连接一个IP不存在的主机时，握手过程是怎样的？
 categories: 
   - 计算机网络
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00700-2668600992.png
 ---
 
 

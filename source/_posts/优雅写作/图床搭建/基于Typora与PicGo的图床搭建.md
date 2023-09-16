@@ -28,15 +28,15 @@ description:
 
    设置github的信息，设定仓库名处要设置成用户名+仓库名。
 
-   ![picgo](https://gitee.com/hu-zhihong/picbed/raw/master/picgo.png)
+   ![picgo](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/picgo.png)
 
    3.2 使用gitee
 
    首先在PicGo中选择插件设置，安装gitee-uploader，然后repo一定要设置对应的网页链接，custompath一定要填，填default。
 
-   ![gitee_1](https://gitee.com/hu-zhihong/picbed/raw/master/gitee_1.png)
+   ![gitee_1](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/gitee_1.png)
 
-   ![gitee_2](https://gitee.com/hu-zhihong/picbed/raw/master/gitee_2.png)
+   ![gitee_2](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/gitee_2.png)
 
 4. 设置完后，图片就可以通过PicGo上传到github的仓库里了，然后通过复制PicGo里的链接到用的地方显示图片了。
 
@@ -44,4 +44,4 @@ description:
 
 在Typora中的编好设置中设置相应的信息，然后写md文件的时候，把图片拖入到文章中，会弹出下拉框，再点击**上传图片**，则自动通过PicGo上传图片。
 
-![Typora_1](https://gitee.com/hu-zhihong/picbed/raw/master/Typora_1.png)
+![Typora_1](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Typora_1.png)

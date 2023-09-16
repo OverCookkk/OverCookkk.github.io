@@ -1,9 +1,11 @@
 ---
 title: Redis性能优化
 tags: [Redis,性能优化]      #添加的标签
-categories: Redis                           #添加的分类
+categories: #添加的分类
+  - 中间件
+  - Redis
 description: 本文介绍多种方法优化redis，提升redis的运行速度。
-#cover:
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00729-647474013.png
 ---
 
 ## 前言
@@ -85,7 +87,7 @@ Pipeline (管道技术) 是客户端提供的一种批处理技术，用于一�
 
 Redis 过期键值删除使用的是贪心策略，它每秒会进行 10 次过期扫描，此配置可在 redis.conf 进行配置，默认值是 `hz 10`，Redis 会随机抽取 20 个值，删除这 20 个键中过期的键，如果过期 key 的比例超过 25% ，重复执行此流程，如下图所示：
 
-![redis删除过期键流程](https://gitee.com/hu-zhihong/picbed/raw/master/redis%E5%88%A0%E9%99%A4%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B5%81%E7%A8%8B.png)
+![redis删除过期键流程](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/redis%E5%88%A0%E9%99%A4%E8%BF%87%E6%9C%9F%E9%94%AE%E6%B5%81%E7%A8%8B.png)
 
 如果在大型系统中有大量缓存在同一时间同时过期，那么会导致 Redis 循环多次持续扫描删除过期字典，直到过期字典中过期键值被删除的比较稀疏为止，而在整个执行过程会导致 Redis 的读写出现明显的卡顿，卡顿的另一种原因是内存管理器需要频繁回收内存页，因此也会消耗一定的 CPU。
 

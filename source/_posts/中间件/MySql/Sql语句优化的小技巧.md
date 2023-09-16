@@ -1,9 +1,11 @@
 ---
 title: Sql语句优化的小技巧
 tags: [MySql]      #添加的标签
-categories: MySql
+categories: 
+  - 中间件
+  - MySql
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00708-1931273502.png
 ---
 
 ## 避免使用select*

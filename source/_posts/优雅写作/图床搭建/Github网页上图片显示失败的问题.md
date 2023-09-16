@@ -14,7 +14,7 @@ description:
 
 比如在github上打开一个项目，项目里的图片无法查看，导致在博客显示的图片也显示不了，点击**F12**打开控制台查看
 
-![pic_fail](https://gitee.com/hu-zhihong/picbed/raw/master/pic_fail.png)
+![pic_fail](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/pic_fail.png)
 
 报错显示连接超时等问题。
 
@@ -38,7 +38,7 @@ raw.githubusercontent.com
 
 在IP搜寻网站中查找这个域名对应的IP地址，如下图：
 
-![pic_fail_2](https://gitee.com/hu-zhihong/picbed/raw/master/pic_fail_2.png)
+![pic_fail_2](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/pic_fail_2.png)
 
 图片中可以看到，这个域名对应了四个IP地址。
 

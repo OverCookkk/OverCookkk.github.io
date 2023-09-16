@@ -5,7 +5,7 @@ categories:
   - 计算机网络
   #- http
 description: http与https的区别与原理
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00699-1913874295.png
 ---
 
 ## http和https的基本概念
