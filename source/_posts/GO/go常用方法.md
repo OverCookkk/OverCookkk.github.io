@@ -1,10 +1,10 @@
 ---
-title: 常用方法
-#tags: [hexo建站]      #添加的标签
+title: go常用方法
+tags: [go]      #添加的标签
 categories: 
   - GO
 description:
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00735-3981599422.png
 ---
 
 

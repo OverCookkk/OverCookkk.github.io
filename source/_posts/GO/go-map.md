@@ -1,11 +1,11 @@
 ---
 title: go-map
-tags: [map]      #添加的标签
+tags: [go]      #添加的标签
 categories: 
   - GO
 description:
 #toc: true
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00734-3981599424.png
 ---
 
 

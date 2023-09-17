@@ -4,7 +4,7 @@ tags: [go]      #添加的标签
 categories: 
   - GO
 description: 使用go实现面向对象
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00739-2959395179.png
 ---
 
 面向对象的三大基本特性：

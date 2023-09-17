@@ -3,6 +3,7 @@ title: k8s简介
 tags: [k8s]      #添加的标签
 categories: k8s		#添加的分类
 description: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/391059.jpeg
 ---
 
 ## 容器编排

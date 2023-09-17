@@ -1,10 +1,10 @@
 ---
 title: Git命令基础
-#tags: [hexo建站,hexo部署,github部署,个人博客]      #添加的标签
+tags: [git]      #添加的标签
 categories: 
   - Git
 description: git一些基础的命令
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00753-1559494136.png
 ---
 
 ## 创建版本库

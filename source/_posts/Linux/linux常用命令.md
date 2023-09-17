@@ -3,6 +3,7 @@ title: linux常用命令
 tags: [linux]      #添加的标签
 categories: Linux
 description: 主要介绍常用的linux命令
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/391061.jpeg
 ---
 
 

@@ -1,10 +1,10 @@
 ---
-title: C++编译链接全过程
-#tags: []      #添加的标签
+title: c++编译链接全过程
+tags: [c++]      #添加的标签
 categories: 
-  - C++
+  - c++
 #description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00746-1935579314.png
 ---
 
 从写一个简单的“hello world！”到完成一个大型程序，当程序从编辑完成到执行成功都会经过5个步骤，分别是预处理（Prepressing）、编译（Compilation）、汇编（Assembly）、链接（Linking）和执行（Executing）。

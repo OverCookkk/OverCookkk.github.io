@@ -4,7 +4,7 @@ tags: [go]      #添加的标签
 categories: 
   - GO
 description: 使用go语言实现单例、观察者等常用的设计模式。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00738-2959395181.png
 ---
 
 

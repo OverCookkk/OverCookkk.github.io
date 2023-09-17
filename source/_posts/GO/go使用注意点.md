@@ -1,10 +1,10 @@
 ---
 title: go使用注意点
-#tags: [hexo建站]      #添加的标签
+tags: [go]      #添加的标签
 categories: 
   - GO
 #description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00740-2959395182.png
 ---
 
 1、需要注意`sync.WaitGroup`是一个结构体，进行参数传递的时候要传递指针。

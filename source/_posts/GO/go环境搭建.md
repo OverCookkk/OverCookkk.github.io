@@ -1,10 +1,10 @@
 ---
 title: go环境搭建
-#tags: [hexo建站]      #添加的标签
+tags: [go]      #添加的标签
 categories: 
   - GO
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00736-3981599423.png
 ---
 
 

@@ -5,7 +5,7 @@ categories:
   - GO
 description:
 toc: true
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00733-3981599421.png
 ---
 
 

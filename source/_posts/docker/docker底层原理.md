@@ -3,6 +3,7 @@ title: docker底层原理
 tags: [docker]      #添加的标签
 categories: docker                           #添加的分类
 description: docker本质就是隔离。
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/0007-1066902963.jpeg
 ---
 
 

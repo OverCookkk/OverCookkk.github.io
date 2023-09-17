@@ -1,9 +1,10 @@
 ---
-title: 智能指针
-#tags: [hexo建站,hexo部署,github部署,个人博客]      #添加的标签
-categories: C++                           #添加的分类
+title: c++智能指针
+tags: [c++]      #添加的标签
+categories: 
+  - c++
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00751-3020921006.png
 ---
 
 

@@ -4,7 +4,7 @@ tags: [go]      #添加的标签
 categories: 
   - GO
 description: 通过以实际不同大小的文件为例，来具体比较下不同读取文件方式的差异。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00742-1577985812.png
 ---
 
 

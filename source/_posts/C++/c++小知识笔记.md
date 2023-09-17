@@ -1,10 +1,10 @@
 ---
-title: 小知识笔记
-#tags: [vector]      #添加的标签
+title: c++小知识笔记
+tags: [c++]      #添加的标签
 categories: 
-  - C++
+  - c++
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00749-571229142.png
 ---
 
 ## 宏定义 #define 和 const 常量

@@ -1,10 +1,10 @@
 ---
-title: vector扩容机制
-tags: [vector]      #添加的标签
+title: c++的vector扩容机制
+tags: [c++]      #添加的标签
 categories: 
-  - C++
+  - c++
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00750-571229144.png
 ---
 
 

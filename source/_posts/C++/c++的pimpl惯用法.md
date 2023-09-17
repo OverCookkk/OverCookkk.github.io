@@ -1,10 +1,10 @@
 ---
-title: pimpl 惯用法
-#tags: [hexo建站,hexo部署,github部署,个人博客]      #添加的标签
+title: c++的pimpl 惯用法
+tags: [c++]      #添加的标签
 categories: 
-  - C++
+  - c++
 description: Pimpl是“pointer to implementation”的缩写， 该技巧可以避免在头文件中暴露私有细节。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00748-1007550031.png
 ---
 
 

@@ -1,11 +1,11 @@
 ---
-title: 切片
-#tags: [hexo建站]      #添加的标签
+title: go切片
+tags: [go]      #添加的标签
 categories: 
   - GO
 description: 本文主要介绍切片的基础。
 toc: true
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00737-2230708892.png
 ---
 
 零值切片（用`var`声明的切片）可立即使用，无需调用`make()`创建。

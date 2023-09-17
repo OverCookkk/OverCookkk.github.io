@@ -5,7 +5,7 @@ categories:
   - 优雅写作
   - 图床搭建
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/391066.jpeg
 ---
 
 

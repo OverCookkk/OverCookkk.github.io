@@ -1,10 +1,10 @@
 ---
 title: go依赖管理
-#tags: [hexo建站]      #添加的标签
+tags: [go]      #添加的标签
 categories: 
   - GO
 description: Go Modules的主要亮点在于在编程时使用别人写的代码，即引入一个依赖库时能有非常好的体验。
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00743-1577985814.png
 ---
 
 `go module`是Go1.11版本之后官方推出的版本管理工具，并且从Go1.13版本开始，`go module`将是Go语言默认的依赖管理工具。

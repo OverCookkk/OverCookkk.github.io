@@ -1,16 +1,16 @@
 ---
 title: 实存(RES)与虚存(VIRT)分析
-#tags: []      #添加的标签
+tags: [linux]      #添加的标签
 categories: Linux
 description: 在linux中使用top命令会看到实存(RES)与虚存(VIRT)等信息，他们分别代表着什么意思呢？
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/391060.jpeg
 ---
 
 
 
 ## 概念
 
-![linux_top](https://gitee.com/hu-zhihong/picbed/raw/master/linux_top.png)
+![linux_top](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/linux_top.png)
 
 VIRT：
 

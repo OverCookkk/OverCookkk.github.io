@@ -4,7 +4,7 @@ tags: [go]      #添加的标签
 categories: 
   - GO
 description: 
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00744-3734460254.png
 ---
 
 

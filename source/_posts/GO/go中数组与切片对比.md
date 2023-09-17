@@ -1,10 +1,10 @@
 ---
-title: 数组与切片对比
-#tags: [hexo建站]      #添加的标签
+title: go中数组与切片对比
+tags: [go]      #添加的标签
 categories: 
   - GO
 description: Go 数组比切片好在哪？
-#cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00745-1935579311.png
 ---
 
 

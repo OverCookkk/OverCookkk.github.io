@@ -3,6 +3,7 @@ title: 使用docker搭建go开发环境
 tags: [docker]      #添加的标签
 categories: docker                           #添加的分类
 description: 本文总结了两种docker搭建go开发环境的方法
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00784-4174331895.png
 ---
 
 
