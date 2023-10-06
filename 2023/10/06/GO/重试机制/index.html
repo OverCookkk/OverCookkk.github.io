@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>重试机制 | 胡椒粉的秋天</title><meta name="author" content="pepper"><meta name="copyright" content="pepper"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="重试机制是一种在程序执行过程中出现错误后重新尝试执行程序的一种机制。通过重启软件、重新连接网络、重发请求等方式，来减少程序运行过程中出现的错误，从而提高程序的可靠性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重试机制">
+<meta property="og:url" content="http://example.com/2023/10/06/GO/%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="重试机制是一种在程序执行过程中出现错误后重新尝试执行程序的一种机制。通过重启软件、重新连接网络、重发请求等方式，来减少程序运行过程中出现的错误，从而提高程序的可靠性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00731-647474015.png">
+<meta property="article:published_time" content="2023-10-06T03:01:06.293Z">
+<meta property="article:modified_time" content="2023-10-06T03:01:06.293Z">
+<meta property="article:author" content="pepper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00731-647474015.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/10/06/GO/%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '重试机制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-06 03:01:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/OverCookkk/css/background.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00731-647474015.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">胡椒粉的秋天</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">重试机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-06T03:01:06.293Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-06T03:01:06.293Z" title="更新于 2023-10-06 03:01:06">2023-10-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/GO/">GO</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="重试机制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>重试机制是一种在程序执行过程中出现错误后重新尝试执行程序的一种机制。通过重启软件、重新连接网络、重发请求等方式，来减少程序运行过程中出现的错误，从而提高程序的可靠性。</p>
+<p>重试机制通常应用在网络通讯等领域，比如在<code>调用远程接口</code>时，由于<code>网络波动</code>等原因导致请求失败，就需要进行重试，这样可以最大限度的提高程序的正常运行率。</p>
+<h2 id="封装go重试机制的思路"><a href="#封装go重试机制的思路" class="headerlink" title="封装go重试机制的思路"></a>封装go重试机制的思路</h2><p>封装go重试机制需要考虑以下几个点：</p>
+<p>定义重试最大次数，包括最大尝试次数、重试时间间隔等参数，这些参数可以根据实际情况进行配置和修改。例如，在请求远程接口时，如果经过3次重试后仍然失败，则应该结束本次请求。</p>
+<h3 id="处理重试时的错误类型"><a href="#处理重试时的错误类型" class="headerlink" title="处理重试时的错误类型"></a>处理重试时的错误类型</h3><p>重试时可能因为不同原因引发不同的错误，需要考虑在重试机制中处理这些错误，以便进行后续的尝试。</p>
+<h3 id="定义重试机制的超时时间"><a href="#定义重试机制的超时时间" class="headerlink" title="定义重试机制的超时时间"></a>定义重试机制的超时时间</h3><p>超时时间通常在请求远程服务时用到， 称为超时设置，是指等待服务端返回数据的时间间隔， 超出这个时间间隔将引发错误。在重试机制中，如果进行多次重试后，服务端仍未返回数据，则需要在一定时间内强制结束重试。</p>
+<h3 id="对重试过程进行日志记录"><a href="#对重试过程进行日志记录" class="headerlink" title="对重试过程进行日志记录"></a>对重试过程进行日志记录</h3><p>在重试机制中，需要记录每次重试的结果和原因，包括成功和失败的情况，这样便于排查问题和进行后续优化。</p>
+<h2 id="go重试机制实现"><a href="#go重试机制实现" class="headerlink" title="go重试机制实现"></a>go重试机制实现</h2><p>重试机制的实现方案可以分为两种：<code>函数封装和结构体封装</code></p>
+<p>函数封装是一个简单的方式，它将所有重试机制相关的参数都封装在参数里面，以便于用户调用程序，但它缺少高级功能，如日志记录和函数实现。</p>
+<p>结构体封装是另外一种封装方式，它将重试机制相关的参数封装在结构体里面，允许用户定义结构体以及修改结构体中的参数，同时可以跟踪重试机制的状态。</p>
+<p>在本文中，我们将介绍一种使用结构体进行封装的重试机制，代码实现如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> retry</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Retry <span class="keyword">struct</span> &#123;</span><br><span class="line">    retryCount        <span class="type">int</span>           <span class="comment">// 最大重试次数</span></span><br><span class="line">    retryDelay        time.Duration <span class="comment">// 重试之间的延迟</span></span><br><span class="line">    retryTimeout      time.Duration <span class="comment">// N次重试的超时时间（N次重试后不能超过的时间）</span></span><br><span class="line">    retryIntervalFunc <span class="function"><span class="keyword">func</span><span class="params">(<span class="type">int</span>)</span></span> time.Duration</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> RetriableError <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">error</span> <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e RetriableError)</span></span> Error() <span class="type">string</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> e.<span class="type">error</span>.Error()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 重试方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Retry)</span></span> Retry(fn <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">error</span>) <span class="type">error</span> &#123;</span><br><span class="line">    retryStart := time.Now()</span><br><span class="line">    <span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">    retryCount := <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        duration := r.retryIntervalFunc(retryCount)</span><br><span class="line"></span><br><span class="line">        time.Sleep(duration)</span><br><span class="line"></span><br><span class="line">        err = fn()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> _, ok := err.(RetriableError); ok &#123;</span><br><span class="line">            <span class="keyword">if</span> retryCount &lt; r.retryCount<span class="number">-1</span> &#123;</span><br><span class="line">                retryCount++</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断多次重试后的总时间是否超过retryTimeout</span></span><br><span class="line">        <span class="keyword">if</span> retryStart.Add(r.retryTimeout).Before(time.Now()) &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewRetry</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    retryCount <span class="type">int</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    retryDelay time.Duration,</span></span></span><br><span class="line"><span class="params"><span class="function">    retryTimeout time.Duration,</span></span></span><br><span class="line"><span class="params"><span class="function">    retryIntervalFunc <span class="keyword">func</span>(attempt <span class="type">int</span>)</span></span> time.Duration,</span><br><span class="line">) *Retry &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;Retry&#123;</span><br><span class="line">        retryCount:        retryCount,</span><br><span class="line">        retryDelay:        retryDelay,</span><br><span class="line">        retryTimeout:      retryTimeout,</span><br><span class="line">        retryIntervalFunc: retryIntervalFunc,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleRemoteAPICall</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := NewRetry(<span class="number">5</span>, <span class="number">1</span>*time.Second, <span class="number">5</span>*time.Minute, <span class="function"><span class="keyword">func</span><span class="params">(attempt <span class="type">int</span>)</span></span> time.Duration &#123;</span><br><span class="line">        <span class="keyword">return</span> r.retryDelay</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    resp, err := r.Retry(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">error</span> &#123;</span><br><span class="line">        r, err := http.NewRequest(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;&lt;http://api.example.com&gt;&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> RetriableError&#123;<span class="type">error</span>: err&#125;</span><br><span class="line">        &#125;</span><br><span class="line">        client := &amp;http.Client&#123;&#125;</span><br><span class="line">        resp, err := client.Do(r)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> RetriableError&#123;<span class="type">error</span>: err&#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> resp.StatusCode != http.StatusOK &#123;</span><br><span class="line">            <span class="keyword">return</span> RetriableError&#123;<span class="type">error</span>: fmt.Errorf(<span class="string">&quot;Unexpected status code (%v)&quot;</span>, resp.Status)&#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 远程API调用成功，我们将返回数据。</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，我们将Retry结构体进行了封装。结构体中包含了<code>重试最大次数（RetryCount）</code>、<code>重试间隔（RetryDelay）</code>、<code>超时时间（RetryTimeout）</code>和<code>重试时间间隔函数（RetryIntervalFunc）</code>四个参数，通过 NewRetry（）方法进行初始化。</p>
+<p>其中RetryIntervalFunc接受一个尝试计数器为参数，并据此返回下一次重试之前的时间间隔。fn 函数是要重试的函数，返回一个错误作为<code>重试方法</code>的返回值。</p>
+<p>Retry方法包括一个无限循环，其中会尝试调用 fn 函数。如果 fn 函数返回 nil，method返回 nil，如果错误是RetriableError，则重试，否则返回错误。</p>
+<p>重试方法会在每次重试之间等待指定的延迟时间（RetryDelay），延迟的时间间隔将在RetryIntervalFunc函数中进行计算。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">pepper</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/10/06/GO/%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6/">http://example.com/2023/10/06/GO/%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">胡椒粉的秋天</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00731-647474015.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/10/06/GO/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0/"><img class="prev-cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00738-2959395181.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">go设计模式的实现</div></div></a></div><div class="next-post pull-right"><a href="/2023/10/06/Git/Git%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80/"><img class="next-cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00753-1559494136.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Git命令基础</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">pepper</div><div class="author-info__description"></div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%81%E8%A3%85go%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">封装go重试机制的思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E9%87%8D%E8%AF%95%E6%97%B6%E7%9A%84%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">处理重试时的错误类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6%E7%9A%84%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="toc-number">1.2.</span> <span class="toc-text">定义重试机制的超时时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E9%87%8D%E8%AF%95%E8%BF%87%E7%A8%8B%E8%BF%9B%E8%A1%8C%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="toc-number">1.3.</span> <span class="toc-text">对重试过程进行日志记录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#go%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">go重试机制实现</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00730-647474016.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="nginx"/></a><div class="content"><a class="title" href="/2023/10/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx">nginx</a><time datetime="2023-10-06T03:01:06.297Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00679-3434236608.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="链路追踪"/></a><div class="content"><a class="title" href="/2023/10/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪">链路追踪</a><time datetime="2023-10-06T03:01:06.297Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/06/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00164-127683032.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reactor 和 Proactor"/></a><div class="content"><a class="title" href="/2023/10/06/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor">Reactor 和 Proactor</a><time datetime="2023-10-06T03:01:06.297Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/06/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00062-1497735301.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="负载均衡"/></a><div class="content"><a class="title" href="/2023/10/06/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡">负载均衡</a><time datetime="2023-10-06T03:01:06.297Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91/" title="二叉树"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00702-1434954955.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二叉树"/></a><div class="content"><a class="title" href="/2023/10/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91/" title="二叉树">二叉树</a><time datetime="2023-10-06T03:01:06.297Z" title="发表于 2023-10-06 03:01:06">2023-10-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By pepper</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
