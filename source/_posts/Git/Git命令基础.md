@@ -67,11 +67,11 @@ git log
 
 当改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令`git checkout -- file`。
 
-#### 暂存区
+#### 已经Add到暂存区
 
 当工作区某个文件的内容添加到了暂存区时（add），想撤销暂存，用命令`git reset HEAD <file>`或者`git restore --staged 文件名`。
 
-#### 版本库
+#### 已经commit到版本库
 
 已经提交了不合适的修改到版本库时，想要撤销本次提交，并且回到之前任一个版本，使用命令`git reset --hard commit_id`，这时，如果想推送到远程库，必须使用`git push -f `强制推送。
 
@@ -90,6 +90,22 @@ reset参数：
 方法一：将已提交到暂存区的某个文件从工作区中删除，执行`rm -rf a.txt  # 删除文件`，再执行`git add .`完成删除。
 
 方法二：使用 `git rm a.txt` 命令删除已跟踪的文件。
+
+
+
+## 原位替换
+
+有时候提交（commit）完了才发现漏掉了几个文件没有添加，或者提交信息写错了，此时可以运行带有`--amend`选项的提交命令来重新提交
+
+```text
+git commit -m "initial commit"
+git add XXX
+git commit --amend
+```
+
+执行`git commit --amend`后会弹出提示框可以对首次提交的信息`"initial commit"`进行修改，修改完成后就可以进行push推送了。
+
+
 
 
 
