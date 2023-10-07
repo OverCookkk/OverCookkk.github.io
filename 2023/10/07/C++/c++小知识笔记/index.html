@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>c++小知识笔记 | 胡椒粉的秋天</title><meta name="keywords" content="c++"><meta name="author" content="pepper"><meta name="copyright" content="pepper"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="宏定义 #define 和 const 常量   宏定义 #define const 常量    宏定义，相当于字符替换 常量声明   预处理器处理 编译器处理   无类型安全检查 有类型安全检查   不分配内存 要分配内存   存储在代码段 存储在数据段   可通过 #undef 取消 不可取消   explicit（显式）关键字 explicit 修饰构造函数时，可以防止隐式转换和复制初始化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++小知识笔记">
+<meta property="og:url" content="http://example.com/2023/10/07/C++/c++%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="胡椒粉的秋天">
+<meta property="og:description" content="宏定义 #define 和 const 常量   宏定义 #define const 常量    宏定义，相当于字符替换 常量声明   预处理器处理 编译器处理   无类型安全检查 有类型安全检查   不分配内存 要分配内存   存储在代码段 存储在数据段   可通过 #undef 取消 不可取消   explicit（显式）关键字 explicit 修饰构造函数时，可以防止隐式转换和复制初始化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00749-571229142.png">
+<meta property="article:published_time" content="2023-10-07T16:50:04.118Z">
+<meta property="article:modified_time" content="2023-10-07T16:50:04.118Z">
+<meta property="article:author" content="pepper">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00749-571229142.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/10/07/C++/c++%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'c++小知识笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-07 16:50:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/my_background.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00749-571229142.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">胡椒粉的秋天</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">c++小知识笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-07T16:50:04.118Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-07T16:50:04.118Z" title="更新于 2023-10-07 16:50:04">2023-10-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/c/">c++</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="c++小知识笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="宏定义-define-和-const-常量"><a href="#宏定义-define-和-const-常量" class="headerlink" title="宏定义 #define 和 const 常量"></a>宏定义 #define 和 const 常量</h2><table>
+<thead>
+<tr>
+<th>宏定义 #define</th>
+<th>const 常量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>宏定义，相当于字符替换</td>
+<td>常量声明</td>
+</tr>
+<tr>
+<td>预处理器处理</td>
+<td>编译器处理</td>
+</tr>
+<tr>
+<td>无类型安全检查</td>
+<td>有类型安全检查</td>
+</tr>
+<tr>
+<td>不分配内存</td>
+<td>要分配内存</td>
+</tr>
+<tr>
+<td>存储在代码段</td>
+<td>存储在数据段</td>
+</tr>
+<tr>
+<td>可通过 <code>#undef</code> 取消</td>
+<td>不可取消</td>
+</tr>
+</tbody></table>
+<h2 id="explicit（显式）关键字"><a href="#explicit（显式）关键字" class="headerlink" title="explicit（显式）关键字"></a>explicit（显式）关键字</h2><ul>
+<li>explicit 修饰构造函数时，可以防止隐式转换和复制初始化</li>
+<li>explicit 修饰转换函数时，可以防止隐式转换，但 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/implicit_conversion">按语境转换</a> 除外</li>
+</ul>
+<h2 id="inline-内联函数"><a href="#inline-内联函数" class="headerlink" title="inline 内联函数"></a>inline 内联函数</h2><p>编译器对 inline 函数的处理步骤：</p>
+<ol>
+<li>将 inline 函数体复制到 inline 函数调用点处；</li>
+<li>为所用 inline 函数中的局部变量分配内存空间；</li>
+<li>将 inline 函数的的输入参数和返回值映射到调用方法的局部变量空间中；</li>
+<li>如果 inline 函数有多个返回点，将其转变为 inline 函数代码块末尾的分支（使用 GOTO）。</li>
+</ol>
+<p>优点</p>
+<ol>
+<li>内联函数同宏函数一样将在被调用处进行代码展开，省去了函数调用过程中参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。</li>
+<li>内联函数相比宏函数来说，在代码展开时，会做安全检查或自动类型转换（同普通函数），而宏定义则不会。</li>
+<li>在类中声明同时定义的成员函数，自动转化为内联函数，因此内联函数可以访问类的成员变量，宏定义则不能。</li>
+<li>内联函数在运行时可调试，而宏定义不可以。</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>代码膨胀。内联是以代码膨胀（复制）为代价，消除函数调用带来的开销。如果执行函数体内代码的时间，相比于函数调用的开销较大，那么效率的收获会很少。另一方面，每一处内联函数的调用都要复制代码，将使程序的总代码量增大，消耗更多的内存空间。</li>
+<li>inline 函数无法随着函数库升级而升级。inline函数的改变需要重新编译，不像 non-inline 可以直接链接。</li>
+<li>是否内联，程序员不可控。内联函数只是对编译器的建议，是否对函数内联，决定权在于编译器。</li>
+</ol>
+<h2 id="尽量少使用-using-指示-污染命名空间"><a href="#尽量少使用-using-指示-污染命名空间" class="headerlink" title="尽量少使用 using 指示 污染命名空间"></a>尽量少使用 <code>using 指示</code> 污染命名空间</h2><blockquote>
+<p>一般说来，使用 using 命令比使用 using 编译命令更安全，这是由于它<strong>只导入了指定的名称</strong>。如果该名称与局部名称发生冲突，编译器将<strong>发出指示</strong>。using编译命令导入所有的名称，包括可能并不需要的名称。如果与局部名称发生冲突，则<strong>局部名称将覆盖名称空间版本</strong>，而编译器<strong>并不会发出警告</strong>。另外，名称空间的开放性意味着名称空间的名称可能分散在多个地方，这使得难以准确知道添加了哪些名称。</p>
+</blockquote>
+<p>尽量少使用 <code>using 指示</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br></pre></td></tr></table></figure>
+
+<p>应该多使用 <code>using 声明</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x;</span><br><span class="line">std::cin &gt;&gt; x ;</span><br><span class="line">std::cout &lt;&lt; x &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> std::cin;</span><br><span class="line"><span class="keyword">using</span> std::cout;</span><br><span class="line"><span class="keyword">using</span> std::endl;</span><br><span class="line"><span class="type">int</span> x;</span><br><span class="line">cin &gt;&gt; x;</span><br><span class="line">cout &lt;&lt; x &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="强制类型转换运算符"><a href="#强制类型转换运算符" class="headerlink" title="强制类型转换运算符"></a>强制类型转换运算符</h2><h3 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h3><ul>
+<li>用于非多态类型的转换</li>
+<li>不执行运行时类型检查（转换安全性不如 dynamic_cast）</li>
+<li>通常用于转换数值数据类型（如 float -&gt; int）</li>
+<li>可以在整个类层次结构中移动指针，子类转化为父类安全（向上转换），父类转化为子类不安全（因为子类可能有不在父类的字段或方法）</li>
+</ul>
+<blockquote>
+<p>向上转换是一种隐式转换。</p>
+</blockquote>
+<h3 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h3><ul>
+<li>用于多态类型的转换</li>
+<li>执行运行时类型检查</li>
+<li>只适用于指针或引用</li>
+<li>对不明确的指针的转换将失败（返回 nullptr），但不引发异常</li>
+<li>可以在整个类层次结构中移动指针，包括向上转换、向下转换</li>
+</ul>
+<h3 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h3><ul>
+<li>用于删除 const、volatile 和 __unaligned 特性（如将 const int 类型转换为 int 类型 ）</li>
+</ul>
+<h3 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h3><ul>
+<li>用于位的简单重新解释</li>
+<li>滥用 reinterpret_cast 运算符可能很容易带来风险。 除非所需转换本身是低级别的，否则应使用其他强制转换运算符之一。</li>
+<li>允许将任何指针转换为任何其他指针类型（如 <code>char*</code> 到 <code>int*</code> 或 <code>One_class*</code> 到 <code>Unrelated_class*</code> 之类的转换，但其本身并不安全）</li>
+<li>也允许将任何整数类型转换为任何指针类型以及反向转换。</li>
+<li>reinterpret_cast 运算符不能丢掉 const、volatile 或 __unaligned 特性。</li>
+<li>reinterpret_cast 的一个实际用途是在哈希函数中，即，通过让两个不同的值几乎不以相同的索引结尾的方式将值映射到索引。</li>
+</ul>
+<h3 id="bad-cast"><a href="#bad-cast" class="headerlink" title="bad_cast"></a>bad_cast</h3><ul>
+<li>由于强制转换为引用类型失败，dynamic_cast 运算符引发 bad_cast 异常。</li>
+</ul>
+<p>bad_cast 使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;  </span><br><span class="line">    Circle&amp; ref_circle = dynamic_cast&lt;Circle&amp;&gt;(ref_shape);   </span><br><span class="line">&#125;  </span><br><span class="line">catch (bad_cast b) &#123;  </span><br><span class="line">    cout &lt;&lt; &quot;Caught: &quot; &lt;&lt; b.what();  </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="new、delete"><a href="#new、delete" class="headerlink" title="new、delete"></a>new、delete</h2><ol>
+<li>new &#x2F; new[]：完成两件事，先底层调用 malloc 分配了内存，然后调用构造函数（创建对象）。</li>
+<li>delete&#x2F;delete[]：也完成两件事，先调用析构函数（清理资源），然后底层调用 free 释放空间。</li>
+<li>new 在申请内存时会自动计算所需字节数，而 malloc 则需我们自己输入申请内存空间的字节数。</li>
+</ol>
+<h2 id="函数指针、指针函数"><a href="#函数指针、指针函数" class="headerlink" title="函数指针、指针函数"></a>函数指针、指针函数</h2><h2 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h2><p>为什么网站开启CDN用户访问会更快呢？因为CDN将源站内容分发至全国所有的节点，缩短用户查看对象的延迟，提高用户访问网站的响应速度与网站的可用性，解决网络带宽小、用户访问量大、网点分布不均等问题。</p>
+<p>简单来说，当网站开启CDN，用户访问该网站，并非直接访问该网站的原服务器，而是一个服务器分发的离你最近的一个服务器节点，由于服务器离你近了，就可以就近获取CDN上缓存的内容，所以访问速度或者下载速度会更快。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">pepper</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/10/07/C++/c++%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/">http://example.com/2023/10/07/C++/c++%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">胡椒粉的秋天</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c++</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00749-571229142.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/10/07/C++/C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%85%A8%E8%BF%87%E7%A8%8B/"><img class="prev-cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00746-1935579314.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">c++编译链接全过程</div></div></a></div><div class="next-post pull-right"><a href="/2023/10/07/C++/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/"><img class="next-cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00751-3020921006.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">c++智能指针</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/10/07/C++/C++%E6%A0%87%E5%87%86%E5%BA%93%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8/" title="c++标准库锁的使用"><img class="cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00747-1007550032.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-07</div><div class="title">c++标准库锁的使用</div></div></a></div><div><a href="/2023/10/07/C++/C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E5%85%A8%E8%BF%87%E7%A8%8B/" title="c++编译链接全过程"><img class="cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00746-1935579314.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-07</div><div class="title">c++编译链接全过程</div></div></a></div><div><a href="/2023/10/07/C++/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="c++智能指针"><img class="cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00751-3020921006.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-07</div><div class="title">c++智能指针</div></div></a></div><div><a href="/2023/10/07/C++/c++%E7%9A%84pimpl%E6%83%AF%E7%94%A8%E6%B3%95/" title="c++的pimpl 惯用法"><img class="cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00748-1007550031.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-07</div><div class="title">c++的pimpl 惯用法</div></div></a></div><div><a href="/2023/10/07/C++/c++%E7%9A%84vector%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6/" title="c++的vector扩容机制"><img class="cover" src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00750-571229144.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-07</div><div class="title">c++的vector扩容机制</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">pepper</div><div class="author-info__description"></div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89-define-%E5%92%8C-const-%E5%B8%B8%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">宏定义 #define 和 const 常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#explicit%EF%BC%88%E6%98%BE%E5%BC%8F%EF%BC%89%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.</span> <span class="toc-text">explicit（显式）关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inline-%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">inline 内联函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BD%E9%87%8F%E5%B0%91%E4%BD%BF%E7%94%A8-using-%E6%8C%87%E7%A4%BA-%E6%B1%A1%E6%9F%93%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">尽量少使用 using 指示 污染命名空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">5.</span> <span class="toc-text">强制类型转换运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static-cast"><span class="toc-number">5.1.</span> <span class="toc-text">static_cast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dynamic-cast"><span class="toc-number">5.2.</span> <span class="toc-text">dynamic_cast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const-cast"><span class="toc-number">5.3.</span> <span class="toc-text">const_cast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reinterpret-cast"><span class="toc-number">5.4.</span> <span class="toc-text">reinterpret_cast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bad-cast"><span class="toc-number">5.5.</span> <span class="toc-text">bad_cast</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new%E3%80%81delete"><span class="toc-number">6.</span> <span class="toc-text">new、delete</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E3%80%81%E6%8C%87%E9%92%88%E5%87%BD%E6%95%B0"><span class="toc-number">7.</span> <span class="toc-text">函数指针、指针函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CDN"><span class="toc-number">8.</span> <span class="toc-text">CDN</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/07/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00730-647474016.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="nginx"/></a><div class="content"><a class="title" href="/2023/10/07/%E4%B8%AD%E9%97%B4%E4%BB%B6/nginx/" title="nginx">nginx</a><time datetime="2023-10-07T16:50:04.126Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/07/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00679-3434236608.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="链路追踪"/></a><div class="content"><a class="title" href="/2023/10/07/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" title="链路追踪">链路追踪</a><time datetime="2023-10-07T16:50:04.126Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/07/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00164-127683032.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reactor 和 Proactor"/></a><div class="content"><a class="title" href="/2023/10/07/%E5%90%8E%E7%AB%AF/Reactor%20%E5%92%8C%20Proactor/" title="Reactor 和 Proactor">Reactor 和 Proactor</a><time datetime="2023-10-07T16:50:04.126Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/07/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00062-1497735301.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="负载均衡"/></a><div class="content"><a class="title" href="/2023/10/07/%E5%90%8E%E7%AB%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="负载均衡">负载均衡</a><time datetime="2023-10-07T16:50:04.126Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91/" title="二叉树"><img src="https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00702-1434954955.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二叉树"/></a><div class="content"><a class="title" href="/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91/" title="二叉树">二叉树</a><time datetime="2023-10-07T16:50:04.126Z" title="发表于 2023-10-07 16:50:04">2023-10-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By pepper</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
