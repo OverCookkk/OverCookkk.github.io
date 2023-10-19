@@ -18,7 +18,7 @@ cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_ima
 
 
 
-### API参数
+### API参数（param参数）
 
 可以通过Context的Param方法获取API参数
 
@@ -43,11 +43,11 @@ func main() {
 http://127.0.0.1:9090/hello/lihua/sing
 ```
 
+即lihua就是name，sing就是action
 
 
 
-
-### URL参数
+### URL参数（query参数）
 
 URL参数可以通过DefaultQuery()或者Query()方法获取，参数指的是URL中`?`后面携带的参数，例如：`/user/search?username=lihua&address=beijing`
 
@@ -75,7 +75,7 @@ http://127.0.0.1:9090/welcom?name=lihua
 
 
 
-### 表单参数
+### 表单参数（form）
 
 表单传输为post请求，http常见的传输格式为4种：
 
@@ -84,7 +84,7 @@ http://127.0.0.1:9090/welcom?name=lihua
 - xml
 - form-data
 
-表单参数可以通过PostForm()方法获取，该方法默认解析的是x-www-form-urlencoded或form-data格式的数据。
+表单参数可以通过PostForm()方法获取，或者直接使用ShouldBindWith()方法绑定结构体，该方法默认解析的是x-www-form-urlencoded或form-data格式的数据。
 
 ```go
 func Post() {
@@ -134,6 +134,38 @@ func Post() {
 
 
 ### 上传文件
+
+`c.FormFile("file")`方法获取上传的文件，其中`"file"`是前端表单中文件字段的名称
+
+```go
+func main() {
+	r := gin.Default()
+
+	// 设置上传文件的最大大小为 8MB
+	r.MaxMultipartMemory = 8 << 20 // 8MB
+
+	r.POST("/upload", func(c *gin.Context) {
+		// 单个文件
+		file, err := c.FormFile("file")
+		if err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("获取上传文件失败: %s", err.Error()))
+			return
+		}
+
+		// 将文件保存到指定路径
+		dst := "uploads/" + file.Filename
+		err = c.SaveUploadedFile(file, dst)
+		if err != nil {
+			c.String(http.StatusInternalServerError, fmt.Sprintf("保存上传文件失败: %s", err.Error()))
+			return
+		}
+
+		c.String(http.StatusOK, fmt.Sprintf("文件 '%s' 上传成功!", file.Filename))
+	})
+
+	r.Run(":9090")
+}
+```
 
 
 
