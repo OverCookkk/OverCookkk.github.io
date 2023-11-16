@@ -1,10 +1,9 @@
 ---
 title: Elasticsearch
-#tags: []      #添加的标签
-categories: 
+categories:
   - 中间件
   - elasticsearch
-description: 全文搜索引擎是目前广泛应用的主流搜索引擎
+description: ES（Elasticsearch）是一个开源的分布式搜索和分析引擎，它构建在Apache Lucene库之上。它被设计用于快速、可扩展和实时地搜索、分析和存储大规模数据。
 cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00706-1772420198.png
 ---
 
@@ -39,32 +38,6 @@ cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_ima
 
 综上所述，选择使用ES而不是传统数据库的原因在于其强大的搜索和分析能力、良好的扩展性和实时性，以及适用于非结构化或半结构化数据的存储和检索需求。然而，具体选择何种技术取决于应用的特定需求和数据模型。在某些情况下，数据库和ES可以结合使用，以满足不同层次的数据管理和查询需求。
 
-
-
-## 倒排索引
-
-生成的倒排索引中，词条会排序，形成一颗树形结构，提升词条的查询速度。
-
-如下图所示，查询"华为"会得到对应的value=1和3，再通过1和3找到id=1和3的文档。
-
-![ElasticSearch数据的存储和搜索原理](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/ElasticSearch%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%90%9C%E7%B4%A2%E5%8E%9F%E7%90%86.png)
-
-
-
-## ES基本概念与关系型数据库的比较
-
-| ES概念                                         | 关系型数据库       |
-| :--------------------------------------------- | :----------------- |
-| Index（索引）支持全文检索                      | Database（数据库） |
-| Type（类型）                                   | Table（表）        |
-| Document（文档），不同文档可以有不同的字段集合 | Row（数据行）      |
-| Field（字段）                                  | Column（数据列）   |
-| Mapping（映射）                                | Schema（模式）     |
-
-
-
-
-
 ## Elasticsearch vs Solr的选择
 
 由于Lucene的复杂性，一般很少会考虑它作为搜索的第一选择，排除一些公司需要自研搜索框架，底层需要依赖Lucene。所以这里我们重点分析 Elasticsearch 和 Solr。
@@ -84,3 +57,117 @@ cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_ima
 |      查询DSL      |              JSON（有限），XML（有限）或URL参数              |                             JSON                             |
 | 索引/收集领导控制 |      领导者安置控制和领导者重新平衡甚至可以节点上的负载      |                            不可能                            |
 |     机器学习      |    内置 - 在流聚合之上，专注于逻辑回归和学习排名贡献模块     |         商业功能，专注于异常和异常值以及时间序列数据         |
+
+
+## 核心概念
+
+
+- 索引（Index）：索引是ES中存储和组织数据的逻辑容器。它类似于关系数据库中的数据库，可以包含多个类型（Type）。
+- 类型（Type）：类型是索引中的逻辑分类，用于定义相似结构的文档集合。从ES 7.0版本开始，类型已经被弃用，都使用默认类型_doc，推荐使用单一索引多个字段来代替。
+- 文档（Document）：文档是ES中的基本数据单元，以JSON格式表示。每个文档都有一个唯一的ID，并且属于特定的索引和类型（如果使用旧版本）。
+- 映射（Mapping）：映射定义了索引中文档的结构和字段的类型。它类似于关系数据库中的表结构定义。
+- 查询（Query）：查询是用于搜索和过滤文档的方式。ES提供了丰富的查询语法和功能，包括全文搜索、精确匹配、范围查询等。
+- 聚合（Aggregation）：聚合是对文档进行分组和计算的操作，类似于关系数据库中的GROUP BY和聚合函数。它可以用于生成统计数据、分析结果等。
+- 节点（Node）：节点是ES集群中的一个实例，负责存储和处理数据。一个ES集群可以由多个节点组成，每个节点可以承担不同的角色，如主节点、数据节点、协调节点等。
+- 集群（Cluster）：集群是由多个节点组成的ES环境，共同协作来存储和处理数据。集群提供了高可用性、容错性和水平扩展能力。
+
+与数据库的比较
+
+| ES概念                                         | 关系型数据库       |
+| :--------------------------------------------- | :----------------- |
+| Index（索引）支持全文检索                      | Database（数据库） |
+| Type（类型）                                   | Table（表）        |
+| Document（文档），不同文档可以有不同的字段集合 | Row（数据行）      |
+| Field（字段）                                  | Column（数据列）   |
+| Mapping（映射）                                | Schema（模式）     |
+
+
+## 搜索与查询
+
+1. 全文搜索 Match Query：用于执行全文搜索，根据指定的字段和关键词匹配文档。它会对关键词进行分析，并返回与关键词最相关的文档。
+2. 精确匹配 Term Query：用于精确匹配，根据指定的字段和值查找完全匹配的文档。它不会对值进行分析，而是直接进行精确匹配。
+3. 范围查询 Range Query：用于在指定的范围内搜索文档。你可以指定数值、日期或字符串的范围条件，以获取满足条件的文档。
+4. 布尔查询 Bool Query：用于组合多个查询条件，支持逻辑操作符（must、must_not、should）。通过布尔查询，你可以构建复杂的查询逻辑。
+5. 过滤器 Filtered Query：结合查询和过滤器，用于同时执行查询和筛选操作。过滤器可以提高查询性能，因为它们不需要计算相关性，只需判断文档是否满足条件。
+6. 短语匹配查询 Match Phrase Query：类似于Match Query，但要求关键词作为短语完整匹配。它可以更精确地匹配短语，而不仅仅是单个词项。
+7. 前缀查询 Prefix Query：用于根据指定字段的前缀匹配文档。它可以用于搜索以特定前缀开头的词项。
+8. 通配符查询 Wildcard Query：支持通配符匹配，允许在查询中使用通配符（*和?）来模糊匹配文档。
+9. 模糊查询 Fuzzy Query：用于执行模糊匹配，根据指定字段和模糊度参数查找与关键词相似的文档。它可以处理拼写错误或近似匹配的情况。
+10. 嵌套查询 Nested Query：用于在嵌套对象中执行查询。它允许你在嵌套的文档结构中搜索和过滤数据。
+11. 聚合查询 Aggregation Query：聚合是对文档进行分组和计算的操作。ES提供了各种聚合函数，如求和、平均值、最大值、最小值等。聚合可以用于生成统计数据、分析结果和构建可视化报表。
+
+
+## 原理
+
+### 倒排索引
+
+**计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这种建立索引的方式叫倒排索引。**
+
+如下图所示，查询"华为"会得到对应的value=1和3，再通过1和3找到id=1和3的文档。
+
+![ElasticSearch数据的存储和搜索原理](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/ElasticSearch%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%90%9C%E7%B4%A2%E5%8E%9F%E7%90%86.png)
+
+
+### 分布式集群
+存储数据和搜索的节点可以是 “数据 (data)” 节点，执行更多管理任务的节点可以称为 “主 (master)” 节点；当主节点挂掉时，那么一个从节点自动变成主节点。
+![Elasticsearch集群示意图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Elasticsearch%E9%9B%86%E7%BE%A4%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
+
+### 分片控制（Shards）
+
+索引在ES中被分成多个分片，每个分片可以存储一部分数据。分片允许数据在集群中分布和并行处理。每个分片可以有多个副本，分为**主分片（Primary）**和**副本分片（replica）**，用于提供冗余和高可用性。*副本可以分布在不同的节点上，以防止单点故障。*
+![Elasticsearch分片示意图 1](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Elasticsearch%E5%88%86%E7%89%87%E7%A4%BA%E6%84%8F%E5%9B%BE%201.png)
+
+![Elasticsearch集群分片示意图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Elasticsearch%E9%9B%86%E7%BE%A4%E5%88%86%E7%89%87%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
+
+如果有多台机器故障，还是会导致某个主分片和副本分片丢失，我们还可以配置更高的复制，例如，每个主分片使用两个副本来缓解这种情况。
+
+
+
+### 路由和均衡
+
+当文档被插入到ES中时，它会根据文档ID和路由规则确定将文档存储在哪个分片上。ES使用一致性哈希算法来决定文档与分片之间的映射关系。这样文档可以均匀地分布在整个集群中，实现负载均衡。
+
+
+
+### 协调节点
+
+当执行搜索或查询操作时，客户端将请求发送到协调节点（协调请求），该节点将协调并将请求转发给包含相关数据的分片。每个分片独立地执行查询，并将结果返回给协调节点，最后由协调节点汇总和排序结果。
+![Elasticsearch协调节点搜索查询流程图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Elasticsearch%E5%8D%8F%E8%B0%83%E8%8A%82%E7%82%B9%E6%90%9C%E7%B4%A2%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+
+#### 文档写入
+
+1. 假如选择了Node2（DataNode）发送请求，此时Node2称为coordinating node（协调节点）
+
+2. 计算得到文档要写入的分片 `shard = hash(routing) % number_of_primary_shards` routing 是一个可变值，`默认是文档的 _id`
+
+3. coordinating node会进行路由，将请求转发给其他DataNode（对应某个primary shard，假如主分片在Node1节点上）
+
+4. Node1上的Primary Shard处理请求，写入数据到索引库中，并将数据同步到其他的Replica Shard中
+
+5. Primary Shard 和 Replica Shard都保存完文档后，返回客户端。
+
+#### 文档检索
+
+1. 假如选择了Node2，此时Node2称为coordinating node（协调节点）
+
+2. 协调节点（Coordinating Node）将查询请求广播到每一个数据节点，这些数据节点的分片会处理该查询请求。
+
+3. 每个分片进行数据查询，将符合条件的数据放在一个优先队列中，并将这些数据的文档ID、节点信息、分片信息返回给协调节点。
+
+4. 协调节点将所有的结果进行汇总，并进行全局排序。
+
+5. 协调节点向包含这些文档ID的分片发送get请求，对应的分片将文档数据返回给协调节点，最后协调节点将数据返回给客户端
+
+
+
+Elasticsearch 使用一种称为自适应副本选择 (ARS) 的机制选择最佳分片副本，以缓解工作负载的增长。
+
+![Elasticsearch的路由、自适应副本选择](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/Elasticsearch%E7%9A%84%E8%B7%AF%E7%94%B1%E3%80%81%E8%87%AA%E9%80%82%E5%BA%94%E5%89%AF%E6%9C%AC%E9%80%89%E6%8B%A9.png)
+
+
+## 应用场景
+
+1. 大规模数据搜索：当需要对大量文本数据进行快速、高效的搜索时，全文搜索引擎是一个理想的选择。它们能够处理数百万或数十亿条记录，并提供实时搜索结果。如文档文章、日志数据、社交媒体数据等
+2. 复杂查询需求：如果你需要执行复杂的查询操作，如模糊搜索、范围搜索、布尔搜索等，全文搜索引擎提供了强大的查询语法和功能，可以满足这些需求
+3. 实时数据分析：全文搜索引擎不仅可以用于搜索，还可以用于实时数据分析和聚合。你可以通过聚合、过滤和分组等功能来获取有关数据集的统计信息和洞察
+4. 分布式和可扩展性：全文搜索引擎通常是分布式的，可以水平扩展以处理大量的数据和请求。它们具有高可用性和容错性，可以在集群中自动分配和复制数据
