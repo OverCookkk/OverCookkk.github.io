@@ -12,7 +12,7 @@ cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_ima
 
 ## map定义
 
-Go语言中提供的映射关系容器为`map`，其内部使用`散列表（hash）`实现。map是一种**无序**的基于`key-value`的数据结构，Go语言中的map是**引用类型**，必须初始化才能使用。
+Go语言中提供的映射关系容器为`map`，其内部使用`散列表（hash）`实现。map是一种**无序**的基于`key-value`的数据结构，必须初始化才能使用。
 
 map类型的变量默认初始值为nil，需要使用make()函数来分配内存。语法为：
 
@@ -22,9 +22,27 @@ make(map[KeyType]ValueType, [cap])
 
 其中cap表示map的容量，该参数虽然不是必须的，但是我们应该在初始化map的时候就为其指定一个合适的容量。
 
+**由于map是一个指针类型，以及go中map是值传递，所以用map作为传参，是指针的拷贝，可以通过函数去改变map的值**
 
+```go
+func changeMap(data map[string]interface{}) {
+	data["c"] = 3
+}
 
-map作为函数参数使用时，由于是它是引用类型，所以函数里改变map值，函数外也会跟着改变。
+func main() {
+	counter := map[string]interface{}{"a": 1, "b": 2}
+	fmt.Println("begin:", counter)
+	changeMap(counter)
+	fmt.Println("after:", counter)
+}
+```
+
+程序运行的结果是：
+
+```text
+begin: map[a:1 b:2]
+after: map[a:1 b:2 c:3]
+```
 
 
 
@@ -71,6 +89,26 @@ for k, v := range scoreMap {
 
 
 ## map底层概述
+
+当我们使用下面的代码初始化map的时候
+
+```go
+data := make(map[string]int)
+```
+
+Go编译器会把make调用转成对[runtime.makemap](https://golang.org/src/runtime/map.go#L298)的调用，我们来看看runtime.makemap的源代码实现。
+
+```go
+ func makemap(t *maptype, hint int, h *hmap) *hmap {
+     ......
+ }
+```
+
+从上面的源代码可以看出，runtime.makemap返回的是一个指向runtime.hmap结构的指针。
+
+所以**map变量是指向runtime.hmap的指针**。
+
+
 
 - `map` 只是一个哈希表。数据被排列成一组 `bucket`。
 - 每个 `bucket` 最多包含 `8` 个 `键/值` 对。

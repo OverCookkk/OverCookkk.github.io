@@ -29,10 +29,22 @@ type SliceHeader struct {
 ![go_切片底层数据结构](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/go_%E5%88%87%E7%89%87%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png)
 
 
+## 切片":"分割操作符
+
+1. **新`slice`结构体里的`array`指针指向原数组或者原`slice`的底层数组，新切片的长度是`：`右边的数值减去左边的数值，新切片的容量是原切片的容量减去`:`左边的数值。**
+2. `:`的左边如果没有写数字，默认是0，右边没有写数字，默认是被分割的数组或被分割的切片的长度。
+
+```go
+a := make([]int, 0, 4) // a的长度是0，容量是4 
+b := a[:] // 等价于 b := a[0:0], b的长度是0，容量是4 
+c := a[:1] // 等价于 c := a[0:1], b的长度是1，容量是4 
+d := a[1:] // 编译报错 panic: runtime error: slice bounds out of range 
+e := a[1:4] // e的长度3，容量3
+```
 
 ## 切片传参（值拷贝）
 
-1. 使用append对实体参数切片添加内容，并不会改变原切片
+1. **使用append对实体参数切片添加内容，并不会改变原切片**
 
    ```go
    func sliceTest(resp []int) {
@@ -52,7 +64,7 @@ type SliceHeader struct {
    
    
 
-2. 使用append对指针参数切片添加内容，才能改变原切片
+2. **使用append对指针参数切片添加内容，才能改变原切片**
 
    ```go
    func sliceTest(resp *[]int) {
@@ -73,19 +85,19 @@ type SliceHeader struct {
 
 
 
-3.使用append后，底层数组改变，但是形参的slice的len还是0
+3. **使用append后，底层数组改变，但是形参的slice的len还是0**
 
-```go
-func main() {
- sl := make([]int, 0, 10)
- var appenFunc = func(s []int) {
-  s = append(s, 10, 20, 30)
- }
- appenFunc(sl)
- fmt.Println(sl)		// 虽然底层数组赋值了10,20,30，但是由于sl的len是0，所以打印出来的是[]
-    fmt.Println(sl[:10])	// sl[0:10]，把底层数组的值打印出来了 [10 20 30 0 0 0 0 0 0 0]
-}
-```
+    ```go
+    func main() {
+     sl := make([]int, 0, 10)
+     var appenFunc = func(s []int) {
+      s = append(s, 10, 20, 30)
+     }
+     appenFunc(sl)
+     fmt.Println(sl)		// 虽然底层数组赋值了10,20,30，但是由于sl的len是0，所以打印出来的是[]
+        fmt.Println(sl[:10])	// sl[0:10]，把底层数组的值打印出来了 [10 20 30 0 0 0 0 0 0 0]
+    }
+    ```
 
 
 
@@ -154,7 +166,7 @@ func main(){
 
 func appendVal(testSlice []string, val string){
    fmt.Printf("testSlice:%p\n", testSlice)
-   testSlice = append(testSlice, "addCap") //触发了扩容机制
+   testSlice = append(testSlice, "addCap") //触发了扩容机制，testSlice指向了新的数据内存地址
    fmt.Printf("after append testSlice:%p\n", testSlice)
    testSlice[0] = val
 }
@@ -163,7 +175,7 @@ func main() {
    var testSlice []string
    testSlice = make([]string, 5)
    testSlice[0] = "foo"
-   appendVal(testSlice,"bar")
+   appendVal(testSlice,"bar") // appendVal传递testSlice时，会拷贝一份副本
    fmt.Println(testSlice[0]) //此时打印出的值为foo
 }
 ```
@@ -194,3 +206,28 @@ s2 := []string{}		 // s2是空切片
 s3 ：= make([]string, 0)	// s3是空切片
 ```
 
+
+## copy机制
+
+Go的内置函数`copy`可以把一个切片里的元素拷贝到另一个切片，源码定义在`src/builtin/builtin.go`，代码如下：
+```go
+// The copy built-in function copies elements from a source slice into a 
+// destination slice. (As a special case, it also will copy bytes from a 
+// string to a slice of bytes.) The source and destination may overlap. Copy 
+// returns the number of elements copied, which will be the minimum of 
+// len(src) and len(dst). 
+func copy(dst, src []Type) int
+```
+
+`copy`会从原切片`src`拷贝 `min(len(dst), len(src))`个元素到目标切片`dst`，
+
+因为拷贝的元素个数`min(len(dst), len(src))`不会超过目标切片的长度`len(dst)`，所以`copy`执行后，目标切片的长度不会变，容量不会变。
+
+**注意**：原切片和目标切片的内存空间可能会有重合，`copy`后可能会改变原切片的值，参考下例。
+
+```go
+    a := []int{1, 2, 3}
+    b := a[1:] // [2 3]
+    copy(a, b) // a和b内存空间有重叠
+    fmt.Println(a, b) // [2 3 3] [3 3]
+```
