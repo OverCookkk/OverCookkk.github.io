@@ -280,3 +280,42 @@ func main() {
 
 defer压栈只会压最后一个Add，前两个Add会在压栈前优先从左往右计算。
 
+
+## defer遇见exit
+
+```go
+func test1() {
+	fmt.Println("test")
+}
+
+func main() {
+	fmt.Println("main start")
+	defer test1()
+	fmt.Println("main end")
+	os.Exit(0)
+}
+```
+
+结果
+
+```text
+main start
+main end
+```
+
+如果在函数里是因为执行了os.Exit而退出，而不是正常return退出或者panic退出，那程序会立即停止，被defer的函数调用不会执行。
+
+
+
+## 被defer的函数或方法的参数的值在执行到defer语句的时候就被确定下来了
+
+```go
+func a() {
+    i := 0
+    defer fmt.Println(i) // 最终打印0
+    i++
+    return
+}
+```
+
+因为执行defer时候，对i的值进行入栈操作，此时i是0，所以是0入栈
