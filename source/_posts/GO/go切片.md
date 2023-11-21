@@ -184,6 +184,34 @@ func main() {
 
 
 
+## 切片for...range...循环
+
+```go
+func main() {
+    var x = []string{"A", "B", "C"}
+
+    for i, s := range x {
+        print(i, s, ",")
+        x[i+1] = "M"
+        x = append(x, "Z")
+        x[i+1] = "Z"
+    }
+}
+```
+输出结果如下：
+
+```text
+0A, 1M, 2C,
+```
+
+range对`slice`做遍历的时候，**实际上，for-range内部调用其实还是for循环，是先构造一个原slice的拷贝，再对这个拷贝做遍历。**
+
+以上面的题目为例：`range x`实际上是会先构造一个原切片`x`的拷贝，我们假设为`y`，然后对`y`做遍历，当执行`append`后，`x`底层数组就进行扩容了，后面对x的修改就和y无关了。
+
+
+
+
+
 ## nil切片与空切片的区别
 
 我们看下在Go源码中的builtin中的定义：

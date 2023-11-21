@@ -27,25 +27,25 @@ func f1() int {
 	defer func() {
 		x++
 	}()
-	return x
+	return x	// 先把x赋值给f1函数的返回值，然后执行defer，所以x++对返回值没影响
 }
 
 func f2() (x int) {
 	defer func() {
 		x++
 	}()
-	return 5
+	return 5	// 先把5赋值给f2的返回值x，然后执行defer的x++，所以返回6
 }
 
 func f3() (y int) {
 	x := 5
-	defer func() {
+	defer func() { // 函数未传值，x引用了外部变量
 		x++
 	}()
-	return x
+	return x	// 先把x赋值给f3的返回值y，然后执行defer的x++，所以对返回值y没影响
 }
 func f4() (x int) {
-	defer func(x int) {
+	defer func(x int) { // 函数传值，所以x是副本，此时x的值是0
 		x++	//改变的是函数中的x的副本
 	}(x)
 	return 5
@@ -131,7 +131,7 @@ main 正常结束
 
 
 
-## defer 中包含 panic
+### defer 中包含 panic
 
 **panic 仅有最后一个可以被 revover 捕获**。
 
@@ -160,7 +160,7 @@ func main()  {
 defer panic2
 ```
 
-当执行到`panic("panic1")`语句后，触发第一个panic，然后defer 顺序出栈执行，先执行`panic("defer panic2")`，这panic会覆盖的第一个panic，最后执行第二个defer，所以捕获了第二个panic。
+当执行到`panic("panic1")`语句后，触发第一个panic，然后defer 顺序出栈执行，先执行`panic("defer panic2")`，这panic会**覆盖**的第一个panic，最后执行第二个defer，所以捕获了第二个panic。
 
 
 
@@ -248,7 +248,7 @@ func main() {
 5,5,5,5,5
 ```
 
-闭包=函数+引用环境，在 for 循环结束后，局部变量 i 的值已经是 5 了，并且defer的闭包是直接引用变量的 i。
+闭包=函数+引用环境，在 for 循环结束后，局部变量 i 的值已经是 5 了，并且defer的闭包是直接**引用**变量的 i，由于是**引用**，所以i跟着变化。
 
 
 
@@ -319,3 +319,30 @@ func a() {
 ```
 
 因为执行defer时候，对i的值进行入栈操作，此时i是0，所以是0入栈
+
+
+
+```go
+func bar() (r int) {
+    defer func() {
+        r += 4
+        if recover() != nil {
+            r += 8
+        }
+    }()
+    
+    var f func()
+    defer f()	// f函数对象的值在此时就被定下来了，为nil，所以defer进去的f是nil
+    f = func() {
+        r += 2
+    }
+
+    return 1
+}
+
+func main() {
+    println(bar())
+}
+```
+
+ 最终打印13
