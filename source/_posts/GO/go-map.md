@@ -3,7 +3,7 @@ title: go-map
 tags: [go]      #添加的标签
 categories: 
   - GO
-description:
+description: 了解map底层原理
 #toc: true
 cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00734-3981599424.png
 ---

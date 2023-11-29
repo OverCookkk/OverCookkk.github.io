@@ -4,7 +4,7 @@ tags: [go]      #添加的标签
 categories: 
   - GO
 description: 本文介绍关于关于channel和select的特性。
-cover: 
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/01204-2118699694.png
 ---
 
 通过一掉题目，抛砖引玉，了解一下`channel`和`select`的作用：
@@ -45,11 +45,11 @@ func main() {
 
 3. `channel`被关闭后：
 
-4. - 往被关闭的`channel`发送数据会触发panic。
+   - 往被关闭的`channel`发送数据会触发panic。
 
    - 从被关闭的`channel`接收数据，会先读完`channel`里的数据。如果数据读完了，继续从`channel`读数据会拿到`channel`里存储的元素类型的零值。
 
-     ```
+     ```go
      data, ok := <- c 
      ```
 

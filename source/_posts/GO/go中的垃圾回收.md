@@ -3,13 +3,13 @@ title: go中的垃圾回收
 tags: [go]      #添加的标签
 categories: 
   - GO
-description: 
-cover: 
+description: 垃圾回收有三种方式，go使用的是标记-清除方式
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/01205-2586887246.png
 ---
 
 ## 常见的几种算GC法
 
-这里垃圾回收的思路，有下面三种方式：
+垃圾回收的思路，有下面三种方式：
 
 1. 标记-清除
 2. 标记-整理

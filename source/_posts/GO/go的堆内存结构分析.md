@@ -3,8 +3,8 @@ title: go的堆内存结构分析
 tags: [go]      #添加的标签
 categories: 
   - GO
-description: 
-cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00744-3734460254.png
+description: 本文分析go中堆内存的结构
+cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/391559.png
 ---
 
 ## 操作系统虚拟内存

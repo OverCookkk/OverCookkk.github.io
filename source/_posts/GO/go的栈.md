@@ -3,7 +3,7 @@ title: go中的栈
 tags: [go]      #添加的标签
 categories: 
   - GO
-description: 
+description: 本文分析go中栈内存的结构
 cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/00744-3734460254.png
 ---
 
