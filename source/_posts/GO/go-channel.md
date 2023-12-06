@@ -3,7 +3,7 @@ title: go-channel
 tags: [go]      #添加的标签
 categories: 
   - GO
-description: 本文介绍关于关于channel和select的特性。
+description: 本文介绍关于channel和select的特性。
 cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_images/01204-2118699694.png
 ---
 
