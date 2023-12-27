@@ -32,7 +32,7 @@ cover: https://raw.githubusercontent.com/OverCookkk/PicBed/master/blog_cover_ima
 
 ![MySql主键索引](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/MySql%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95.png)
 
-2. 唯一索引 UNIQUE：唯一索引列的值必须唯一，但允许有空值。如果是组合索引，则列值的组合必须唯一（每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束）。可以通过`ALTER TABLE 表名 ADD UNIQUE (列名);`创建唯一索引；可以通过`ALTER TABLE 表名 ADD UNIQUE (列名1,列名2);`；也可以在创建表的时候使用语句`KEY type (type)`创建索引。
+2. 唯一索引 UNIQUE：**唯一索引列的值必须唯一，但允许有空值**。如果是组合索引，则列值的组合必须唯一（每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束）。可以通过`ALTER TABLE 表名 ADD UNIQUE (列名);`创建唯一索引；可以通过`ALTER TABLE 表名 ADD UNIQUE (列名1,列名2);`；也可以在创建表的时候使用语句`KEY type (type)`创建索引。
 
    ```mysql
    CREATE TABLE `phpcolor_ad` (  
@@ -100,11 +100,11 @@ DROP INDEX index_name ON table_name;删除索引。
 **非前导模糊查询则可以使用索引**，可优化为使用非前导模糊查询：
 `EXPLAIN SELECT * FROM user WHERE name LIKE 's%';`
 
-3）复合索引的情况下，查询条件不包含索引列最左边部分（不满足最左原则），不会命中符合索引。
-假设name,age,status列创建了复合索引，根据最左原则，可以命中复合索引index_name：
+3）联合索引的情况下，查询条件不包含索引列最左边部分（不满足最左原则），不会命中符合索引。
+假设name,age,status列创建了联合索引，根据最左原则，可以命中复合索引index_name，但是age和status索引就不起作用了：
 `SELECT * FROM user WHERE name='swj' AND status=1;`。
 
-**注意，最左原则并不是说是查询条件的顺序，而是查询条件中是否包含索引最左列字段（如此例子中索引最左列字段是name）。**
+**注意，最左原则并不是说是查询条件的顺序，而是查询条件中是否包含索引最左列字段（如此例子中索引最左列字段是name），mysql优化器会自动调整条件顺序。**
 
 4）union、in、or都能够命中索引，建议使用in，查询的CPU消耗：or>in>union。
 
@@ -115,6 +115,8 @@ DROP INDEX index_name ON table_name;删除索引。
 6）负向条件查询不能使用索引，可以优化为in查询。
 负向条件有：!=、<>、not in、not exists、not like等。
 
-7）范围条件查询可以命中索引。范围条件有：<、<=、>、>=、between等。
+7）**范围条件查询可以命中索引。范围条件有：<、<=、>、>=、between等**。
 
-9）建立索引的列，不允许为null。
+假设a,b,c列创建了联合索引，`select * from table where a = 2 and b > 1000 and c='xxx';`查询a与b会走索引，c不会走，因为mysql遇到范围查询就会停止匹配，a、b走完索引后，c已经是无序了，所以c就没法走索引了。
+
+8）建立索引的列，不允许为null。
