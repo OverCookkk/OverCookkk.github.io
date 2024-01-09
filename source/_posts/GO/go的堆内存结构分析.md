@@ -62,7 +62,7 @@ type mheap struct { // 这个就是golang的堆内存
     // ...
     // ↓ ↓ ↓ ↓ 157行 ↓ ↓ ↓ ↓
     arenas [1 << arenaL1Bits]*[1 << arenaL2Bits]*heapArena // 记录向操作系统申请的所有内存单元
-    // ...
+    // ...1
 }
 
 // 229行，这个结构体描述了一个64MB的内存单元（不是一个结构体64MB），记录向操作系统申请64MB虚拟内存的信息
@@ -92,7 +92,7 @@ type heapArena struct {
 
 分级分配的思想是，有如下几步
 
-1. 先把大的内存拿过来后分成很多小块，相同大小的块属于一个组，叫做mspan
+1. 先把大的内存拿过来后分成很多小块（slot），相同大小的块属于一个组，叫做mspan
 2. 将对象放入能放进去的最小箱子
 3. 回收对象后，下一次有对象来了，就直接放入空闲的空间里面
 
@@ -105,14 +105,14 @@ type heapArena struct {
 ``上面所述的“级”就是 “内存管理单元 mspan”``
 
 - 根据隔离适应策略，使用内存时的最小单位为mspan
-- 每个mspan为N个大小相同的“格子”
-- Go中一共有67种mspan，根据需求创建不同级别的mspan
+- 每个mspan为N个大小相同的“格子”（slot）
+- Go中一共有67种mspan，**根据需求创建不同级别的mspan**
 
 > class 0 比较特别，没有固定大小
 > 源码详情：./src/runtime/sizeclasses.go
 
 ```
-   级别    对象大小  格子的大小   对象数  页面尾部浪费   最大浪费
+   级别  obj对象大小   mspan大小   obj数量  页面尾部浪费   最大浪费
  class  bytes/obj  bytes/span  objects  tail waste  max waste
      1          8        8192     1024           0     87.50%
      2         16        8192      512           0     43.75%
@@ -129,9 +129,9 @@ type heapArena struct {
     67      32768       32768        1           0     12.50%
 ```
 
-> 因为mspan管理内存的最小单位是页面，而页面的大小不一定是size class大小的倍数，这会导致一些内存被浪费
->
-> 例如下图中一个mspan划分成若干个slot用于分配，但是mspan占用页面的大小不能被slot的大小整除，所以有一个tail waste
+> 注意：Page是Golang内存管理与操作系统交互衡量内存容量的基本单元，Golang内存管理内部本身用来给对象存储内存的基本单元是Object。
+
+**mspan划分成若干个slot用于分配，每个slot使用bitmap表示**，因为mspan管理内存的最小单位是object，而object的大小不一定是size class大小的倍数，这会导致一些内存被浪费，例如下图中mspan占用页面的大小不能被slot的大小整除，所以有一个tail waste
 
 ![go中内存mspan分配示意图](https://raw.githubusercontent.com/OverCookkk/PicBed/master/blogImg/go%E4%B8%AD%E5%86%85%E5%AD%98mspan%E5%88%86%E9%85%8D%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
 
