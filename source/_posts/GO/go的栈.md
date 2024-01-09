@@ -225,6 +225,10 @@ $ go build -gcflags=-m main_closure.go
 
 
 
+情况七：**go中的slice、map、channel类型变量本身是引用类型，所以它们会被分配在堆上**
+
+
+
 ### 空接口逃逸
 
 > 如果函数的参数为 interface{}，函数的实参很可能会逃逸
