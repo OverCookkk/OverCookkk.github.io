@@ -85,6 +85,12 @@ reset参数：
 
 
 
+#### 修改已经commit的备注信息
+
+`git commit --amend -m "xxxxx"`
+
+
+
 ### 删除文件
 
 方法一：将已提交到暂存区的某个文件从工作区中删除，执行`rm -rf a.txt  # 删除文件`，再执行`git add .`完成删除。

@@ -37,7 +37,7 @@ type SliceHeader struct {
 ```go
 a := make([]int, 0, 4) // a的长度是0，容量是4 
 b := a[:] // 等价于 b := a[0:0], b的长度是0，容量是4 
-c := a[:1] // 等价于 c := a[0:1], b的长度是1，容量是4 
+c := a[:1] // 等价于 c := a[0:1], c的长度是1，容量是4 
 d := a[1:] // 编译报错 panic: runtime error: slice bounds out of range 
 e := a[1:4] // e的长度3，容量3
 ```
